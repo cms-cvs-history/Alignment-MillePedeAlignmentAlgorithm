@@ -1,0 +1,22 @@
+block MillePedeAlignmentAlgorithm = {
+      
+  string algoName = "MillePedeAlignmentAlgorithm"
+
+  string binaryFile = "milleBinary.dat"
+  untracked string monitorFile = "millePedeMonitor.root"
+  # if previous empty: no monitoring ...
+
+  PSet pedeSteerer = {
+    string steerFile = "pedeSteer.txt"
+
+    PSet fixParameters = { # fix all parameters of Alignables in any of these ranges:
+      vdouble etaRanges =  {} 
+      vdouble zRanges   =  {} # no restrictions in z
+      vdouble rRanges   =  {0., 15., 100., 200.} # pixel and last barrel
+      vdouble phiRanges =  {} # no restrictions in phi .5, 1., 1.5, -0.5}
+    }
+  }
+
+  int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
+
+}
