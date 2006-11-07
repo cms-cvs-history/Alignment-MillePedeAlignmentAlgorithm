@@ -3,18 +3,35 @@ block MillePedeAlignmentAlgorithm = {
   string algoName = "MillePedeAlignmentAlgorithm"
 
   string binaryFile = "milleBinary.dat"
-  untracked string monitorFile = "millePedeMonitor.root"
-  # if previous empty: no monitoring ...
+  untracked string monitorFile = "millePedeMonitor.root" # if empty: no monitoring...
 
   PSet pedeSteerer = {
     string steerFile = "pedeSteer.txt"
 
-    PSet fixParameters = { # fix all parameters of Alignables in any of these ranges:
-      vdouble etaRanges =  {} 
-      vdouble zRanges   =  {} # no restrictions in z
-      vdouble rRanges   =  {0., 15., 100., 200.} # pixel and last barrel
-      vdouble phiRanges =  {} # no restrictions in phi .5, 1., 1.5, -0.5}
+    PSet fixedParameterSelection = {
+      # selection of alignables and their parameters:
+      # comma separated pairs of detector parts/levels as defined in AlignableSelector
+      # and of d.o.f. to be aligned (x,y,z,alpha,beta,gamma) in local frame
+      vstring alignableParamSelector = {
+               "PixelHalfBarrelLadders,111111,pixelLastBarrel",
+               "BarrelSSRods,111111,pixelLastBarrel",
+               "BarrelSSRods,010110,notLastLayer",
+               "BarrelDSRods,000110"
+      }
+      PSet pixelLastBarrel = { # name defined above
+        vdouble etaRanges =  {} 
+        vdouble zRanges   =  {}
+        vdouble rRanges   =  {0., 15., 100., 200.} # pixel and last barrel
+        vdouble phiRanges =  {}
+      }
+      PSet notLastLayer = { # name defined above
+        vdouble etaRanges =  {} 
+        vdouble zRanges   =  {}
+        vdouble rRanges   =  {15., 100.} # barrel except last layer
+        vdouble phiRanges =  {}
+      }
     }
+
   }
 
   int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
