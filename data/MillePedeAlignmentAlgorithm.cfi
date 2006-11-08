@@ -1,39 +1,24 @@
 block MillePedeAlignmentAlgorithm = {
-      
-  string algoName = "MillePedeAlignmentAlgorithm"
+    string algoName = "MillePedeAlignmentAlgorithm"
 
-  string binaryFile = "milleBinary.dat"
-  untracked string monitorFile = "millePedeMonitor.root" # if empty: no monitoring...
+    string binaryFile = "milleBinary.dat"
+    untracked string monitorFile = "millePedeMonitor.root" # if empty: no monitoring...
 
-  PSet pedeSteerer = {
-    string steerFile = "pedeSteer.txt"
+    PSet pedeSteerer = {
+	string steerFile = "pedeSteer.txt"
 
-    PSet fixedParameterSelection = {
-      # selection of alignables and their parameters:
-      # comma separated pairs of detector parts/levels as defined in AlignableSelector
-      # and of d.o.f. to be aligned (x,y,z,alpha,beta,gamma) in local frame
-      vstring alignableParamSelector = {
-               "PixelHalfBarrelLadders,111111,pixelLastBarrel",
-               "BarrelSSRods,111111,pixelLastBarrel",
-               "BarrelSSRods,010110,notLastLayer",
-               "BarrelDSRods,000110"
-      }
-      PSet pixelLastBarrel = { # name defined above
-        vdouble etaRanges =  {} 
-        vdouble zRanges   =  {}
-        vdouble rRanges   =  {0., 15., 100., 200.} # pixel and last barrel
-        vdouble phiRanges =  {}
-      }
-      PSet notLastLayer = { # name defined above
-        vdouble etaRanges =  {} 
-        vdouble zRanges   =  {}
-        vdouble rRanges   =  {15., 100.} # barrel except last layer
-        vdouble phiRanges =  {}
-      }
+	PSet fixedParameterSelection = {
+	    # selection of alignables and their parameters:
+	    # comma separated pairs of detector parts/levels as defined in AlignableSelector
+	    # and of d.o.f. to be aligned (x,y,z,alpha,beta,gamma) in local frame
+	    vstring alignParams = {
+		"PixelHalfBarrelLayers,111111", # fix pixel
+		"BarrelSSRodsLayers15,010110",   # align x,z,gamma (rphi,r,around r?), but...
+		"BarrelSSRodsLayers66,111111",   # ...fix last barrel layer
+		"BarrelDSRods,000110"            # align x,y,z,gamma (rphi,z,r,around r?)
+	    }
+	}
     }
-
-  }
-
-  int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
-
+    
+    int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
 }
