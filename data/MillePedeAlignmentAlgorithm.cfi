@@ -1,8 +1,25 @@
+# MillePedeAlignmentAlgorithm
+# ---------------------------
+# Run first once (or on several datasets) with pedeOut = "" to produce the pede-steering
+# file pedeSteerer.steerFile. Then run the standalone pede ad check for convergence.
+# If it is fine, set pedeOut accordingly and run on 0 events: The pede result will be written
+# to treeFile.
+# It is not yet possible to apply this result for another iteration (which is probably not
+# needed) or to write the result to the database.
+#
 block MillePedeAlignmentAlgorithm = {
     string algoName = "MillePedeAlignmentAlgorithm"
+    # If pedeOut is not empty, such a file is opened and interpreted as pede-otuput
+    # the positions found is transferred to the AlignmentParameters (incl. MillePedeVariables)
+    # and those are written to the treeFile (cf. below).
+    # Currently the alignables have to be identical to those defined in 
+    # AlignmentProducer.ParameterBuilder.Selector.alignParams, but a check is done
+    # only on the resulting number of alignables...
+    untracked string pedeOut = "" #pedeSteer.log"
 
     string binaryFile = "milleBinary.dat"
     untracked string monitorFile = "millePedeMonitor.root" # if empty: no monitoring...
+    string treeFile = "treeFile.root" # parameters, absolute (original) positions, result etc.
 
     PSet pedeSteerer = {
 	string steerFile = "pedeSteer.txt"
@@ -11,6 +28,9 @@ block MillePedeAlignmentAlgorithm = {
 	    # selection of alignables and their parameters:
 	    # comma separated pairs of detector parts/levels as defined in AlignableSelector
 	    # and of d.o.f. to be aligned (x,y,z,alpha,beta,gamma) in local frame
+	    # Should be the same alignables as in defined in 
+	    # AlignmentProducer.ParameterBuilder.Selector.alignParams
+
 	    vstring alignParams = {
 		"PixelHalfBarrelLayers,111111", # fix pixel
 		"BarrelSSRodsLayers15,010110",   # align x,z,gamma (rphi,r,around r?), but...
@@ -19,6 +39,6 @@ block MillePedeAlignmentAlgorithm = {
 	    }
 	}
     }
-    
+
     int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
 }
