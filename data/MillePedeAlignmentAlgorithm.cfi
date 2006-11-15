@@ -9,6 +9,7 @@
 #
 block MillePedeAlignmentAlgorithm = {
     string algoName = "MillePedeAlignmentAlgorithm"
+    untracked string fileDir = "" # if given, everything (in/output) is expected there/goes there
     # If pedeOut is not empty, such a file is opened and interpreted as pede-otuput
     # the positions found is transferred to the AlignmentParameters (incl. MillePedeVariables)
     # and those are written to the treeFile (cf. below).
