@@ -2,20 +2,30 @@
 # ---------------------------
 block MillePedeAlignmentAlgorithm = {
     string algoName = "MillePedeAlignmentAlgorithm"
-    untracked string mode = "full" # full, mille, pede, pedeSteer, pedeRun or pedeRead
+    untracked string mode = "full" # possible modes: full, mille, pede, pedeSteer, pedeRun, pedeRead
     untracked string fileDir = "" # if given, everything (in/output) is expected there/goes there
 
-    string binaryFile = "milleBinary.dat" # where mille wites its derivatives, labels etc.
+    # Where mille writes (and pede reads) derivatives, labels etc.
+    string binaryFile = "milleBinary.dat"
+    # Resulting and initial arameters, absolute (original) positions, result etc.
+    string treeFile   = "treeFile.root" 
+    # Must be empty if mille runs, otherwise should be parallel with treeFiles from production
+    # of binaryFiles above:
+    # If only pede, but not mille is run: List of files to 'merge'.
+    vstring mergeBinaryFiles = {}
+    vstring mergeTreeFiles   = {}
+
     untracked string monitorFile = "millePedeMonitor.root" # if empty: no monitoring...
-    string treeFile = "treeFile.root" # parameters, absolute (original) positions, result etc.
 
     PSet pedeSteerer = {
 	# NOTE: All file names get the directory from 'MillePedeAlignmentAlgorithm.fileDir'.
 	string steerFile = "pedeSteer" # gets automatically .txt ending (and .log for output log)
-	# If MillePedeAlignmentAlgorithm.mode is 'full' or pede, the pede command line is
-	# constructed as: 'pedeCommand'n 'steerFile' 'MillePedeAlignmentAlgorithm.binaryFile'
+	# If MillePedeAlignmentAlgorithm.mode causes pede to run (e.g. 'full', 'pede' etc.),
+	# the pede command line is constructed as:
+	#    'pedeCommand'n 'steerFile' 'MillePedeAlignmentAlgorithm.binaryFiles'
 	# (and - if pedeDump is not empty - extended by: > 'pedeDump')
-	untracked string pedeCommand = "~flucke/cms/pede/myWork_based_orig/pede -ilc"
+	# (MillePedeAlignmentAlgorithm.theDir is taken into account...)
+	untracked string pedeCommand = "~flucke/cms/pede/myWork_based_orig/pede -ilc6"
 	untracked string pedeDump = "pede.dump"
 	
 	# Selection of parameters to fix
@@ -27,4 +37,5 @@ block MillePedeAlignmentAlgorithm = {
         # and ignore the angles. 
     }
     int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
+    bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivatives
 }
