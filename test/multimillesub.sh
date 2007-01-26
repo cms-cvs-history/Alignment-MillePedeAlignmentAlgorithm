@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision$ from $Date: 2007/01/25 11:24:56 $ by $Author: flucke $
+# $Revision: 1.2 $ from $Date: 2007/01/26 11:25:03 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -32,7 +32,7 @@ BSUB_OPT_R=cmsalca #"\"type==SLC3&&swp>500&&pool>1000\""
 #QUEUE=1nh
 #BSUB_OPT_R="type==SLC3&&swp>450&&pool>750"
 
-CMSSW_VERS=CMSSW_1_0_6
+CMSSW_VERS=CMSSW_1_2_0
 BASE_DIR=${HOME}/scratch0/${CMSSW_VERS}
 
 OUT_DIR=$JOB_NAME
