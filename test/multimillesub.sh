@@ -1,6 +1,5 @@
 #!/bin/zsh 
-# Version $Id$ from $Date$ by $Author$
-
+# $Revision$ from $Date: 2007/01/25 11:24:56 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -182,10 +181,8 @@ process Alignment = {
         int32 minMultiplicity = 1
     }
     
-    # Alignment producer (incl refitter)
+    # Alignment producer
     include "Alignment/CommonAlignmentProducer/data/AlignmentProducer.cff"
-    replace AlignmentProducer.randomShift    = 0.
-    replace AlignmentProducer.randomRotation = 0.
     replace AlignmentProducer.ParameterBuilder.Selector = {
         vstring alignParams = {
             $ALIGN_SEL
@@ -215,14 +212,6 @@ process Alignment = {
 #   replaces AlignmentProducer.MisalignmentScenario:
     include "Alignment/MillePedeAlignmentAlgorithm/test/myMisalignmentScenario.cff"
     replace AlignmentProducer.algoConfig = {
-	# FIXME using DefaultRefitter # does not work in 1_0_6
-	string Fitter = "KFFittingSmoother"   
-	string Propagator = "PropagatorWithMaterial" 
-	string TTRHBuilder = "WithoutRefit"
-	string src = "AlignmentTracks"
-        bool debug = false
-	# FIXME end
-
 	# using MillePedeAlignmentAlgorithm
 	string algoName = "MillePedeAlignmentAlgorithm"
 	untracked string mode = "MODE" # full, mille, pede, pedeSteer, pedeRun or pedeRead
@@ -243,17 +232,28 @@ process Alignment = {
         int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
 	bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivs
     }
+
+    include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilderWithoutRefit.cfi"
+    include "RecoTracker/TrackProducer/data/RefitterWithMaterial.cff"
+    replace TrackRefitter.TTRHBuilder = "WithoutRefit"
+    replace TrackRefitter.src         = "AlignmentTracks"
+    replace TrackRefitter.TrajectoryInEvent = true
     
     # input file
     # source = EmptySource {untracked int32 maxEvents = EVTS_PER_JOB}
     source = PoolSource { 
 	#include "Alignment/MillePedeAlignmentAlgorithm/test/files103ZmumuLocal.cff"
-	include "Alignment/MillePedeAlignmentAlgorithm/test/files106ZmumuCSA06_2.cff"
+	#include "Alignment/MillePedeAlignmentAlgorithm/test/files106ZmumuCSA06_2.cff"
+	untracked vstring fileNames = { 
+            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_1_50000.root',
+            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_100000_150000.root'
+        }
  	untracked int32 maxEvents   = EVTS_PER_JOB  # -1
 	untracked uint32 skipEvents = SKIP_EVTS
-    }	    
+    }
     
-    path p = { AlignmentTracks }
+    path p = { AlignmentTracks, TrackRefitter }
+
 }
 EOF
 
