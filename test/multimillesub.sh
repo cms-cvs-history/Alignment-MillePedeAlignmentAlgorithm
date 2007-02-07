@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.2 $ from $Date: 2007/01/26 11:25:03 $ by $Author: flucke $
+# $Revision: 1.3 $ from $Date: 2007/01/26 11:43:16 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -46,17 +46,19 @@ SUBMIT_DIR=${HOME}/scratch0/submit/${OUT_DIR}
 
 INPUTTAG=AlCaRecoCSA06ZMuMu
 # CSA06
-ALIGN_SEL="\"TOBDSRods,111111\",\"TOBSSRodsLayers15,1ff111\""
-ALIGN_SEL=${ALIGN_SEL}", \"TIBDSDets,111111\", \"TIBSSDets,1ff111\""
-ALIGN_SEL=${ALIGN_SEL}", \"TOBSSRodsLayers66,ffffff\""
-ALIGN_SEL=${ALIGN_SEL}", \"PixelHalfBarrelLayers,ffffff\""
+#ALIGN_SEL="\"TOBDSRods,111111\",\"TOBSSRodsLayers15,1ff111\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TIBDSDets,111111\", \"TIBSSDets,1ff111\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBSSRodsLayers66,ffffff\""
+#ALIGN_SEL=${ALIGN_SEL}", \"PixelHalfBarrelLayers,ffffff\""
 # NOTE 2006/11 A
-##ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
-#ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""  # fix pixel
-#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsDS,111001,geomSel\"" # 4 params for double sided barrel
-#ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,1f1001,geomSel\""   # fix global z/local y for...
-#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001,geomSel\"" #  ...single sided TIB and TOB
-#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
+#ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
+ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""  # fix pixel
+ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsDS,111001,geomSel\"" # 4 params for double sided barrel
+ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,1f1001,geomSel\""   # fix global z/local y for...
+ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001,geomSel\"" #  ...single sided TIB and TOB
+ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
+#echo fix TOB Layer6 at 0
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,fff00f,geomSel\"" # (except of fixed last layer)
 
 # NOTE 2006/11 B(?)
 #ALIGN_SEL="\"PixelHalfBarrelLayers,ccc00c\""  # fix pixel
@@ -100,7 +102,7 @@ ALIGN_Z_SEL2="" # empty array means no restriction:
 ALIGN_R_SEL2=""
 ALIGN_PHI_SEL2="1.55, 1.63"
 
-DO_MISALIGN=true
+DO_MISALIGN=true #false# echo NO misalignment!
 
 ############################################################
 ###
@@ -123,6 +125,10 @@ if [ $? -ne 0 ] ; then
     exit
 fi
 ssh $RESULTHOST mkdir -p /scratch/flucke/lxbatch/$OUT_DIR
+if [ $? -ne 0 ] ; then 
+    echo Problems creating /scratch/flucke/lxbatch/$OUT_DIR on $RESULTHOST !
+    exit
+fi
 cp $0 $SUBMIT_DIR
 cd $BASE_DIR
 tar rf $THE_TAR src/*/*/*/*.cf? lib/* module/*
@@ -182,6 +188,8 @@ process Alignment = {
     }
     
     # Alignment producer
+    include "Alignment/TrackerAlignment/data/Scenarios.cff"
+#    replace MisalignmentScenarioSettings.setError = false # replace in block defined abouve
     include "Alignment/CommonAlignmentProducer/data/AlignmentProducer.cff"
     replace AlignmentProducer.ParameterBuilder.Selector = {
         vstring alignParams = {
@@ -198,19 +206,19 @@ process Alignment = {
     }
 
     replace AlignmentProducer.doMisalignmentScenario = $DO_MISALIGN
-#    #replace AlignmentProducer.MisalignmentScenario.seed = 654321
-#    replace AlignmentProducer.MisalignmentScenario.TPBs.scale = 0.
-#    replace AlignmentProducer.MisalignmentScenario.TPEs.scale = 0.
-#    replace AlignmentProducer.MisalignmentScenario.TECs.scale = 0.
-#    replace AlignmentProducer.MisalignmentScenario.TIDs.scale = 0.
-#    replace AlignmentProducer.MisalignmentScenario.TIBs.Dets = { double scale = 0.}
-###    replace AlignmentProducer.MisalignmentScenario.TIBs.phiZ = 0.
-###    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
-#    replace AlignmentProducer.MisalignmentScenario.TOBs.Dets = { double scale = 0.}
-###    replace AlignmentProducer.MisalignmentScenario.TOBs.phiZ = 0.
-###    replace AlignmentProducer.MisalignmentScenario.TOBs.scale = 0.
+    replace MisalignmentScenarioSettings.setError = false 
+    replace AlignmentProducer.MisalignmentScenario.TPBs.scale = 0.
+    replace AlignmentProducer.MisalignmentScenario.TPEs.scale = 0.
+    replace AlignmentProducer.MisalignmentScenario.TECs.scale = 0.
+    replace AlignmentProducer.MisalignmentScenario.TIDs.scale = 0.
+    replace AlignmentProducer.MisalignmentScenario.TIBs.Dets = { double scale = 0.}
+##    replace AlignmentProducer.MisalignmentScenario.TIBs.phiZ = 0.
+##    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
+    replace AlignmentProducer.MisalignmentScenario.TOBs.Dets = { double scale = 0.}
+##    replace AlignmentProducer.MisalignmentScenario.TOBs.phiZ = 0.
+##    replace AlignmentProducer.MisalignmentScenario.TOBs.scale = 0.
 #   replaces AlignmentProducer.MisalignmentScenario:
-    include "Alignment/MillePedeAlignmentAlgorithm/test/myMisalignmentScenario.cff"
+#    include "Alignment/MillePedeAlignmentAlgorithm/test/myMisalignmentScenario.cff"
     replace AlignmentProducer.algoConfig = {
 	# using MillePedeAlignmentAlgorithm
 	string algoName = "MillePedeAlignmentAlgorithm"
@@ -233,21 +241,18 @@ process Alignment = {
 	bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivs
     }
 
-    include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilderWithoutRefit.cfi"
-    include "RecoTracker/TrackProducer/data/RefitterWithMaterial.cff"
-    replace TrackRefitter.TTRHBuilder = "WithoutRefit"
-    replace TrackRefitter.src         = "AlignmentTracks"
-    replace TrackRefitter.TrajectoryInEvent = true
+    include "Alignment/CommonAlignmentProducer/data/AlignmentProducerRefitting.cff"
+    replace TrackRefitter.src = "AlignmentTracks"
     
     # input file
     # source = EmptySource {untracked int32 maxEvents = EVTS_PER_JOB}
     source = PoolSource { 
-	#include "Alignment/MillePedeAlignmentAlgorithm/test/files103ZmumuLocal.cff"
-	#include "Alignment/MillePedeAlignmentAlgorithm/test/files106ZmumuCSA06_2.cff"
-	untracked vstring fileNames = { 
-            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_1_50000.root',
-            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_100000_150000.root'
-        }
+#	include "Alignment/MillePedeAlignmentAlgorithm/test/files_AlCaReco_ZToMuMu-LowLumiPU.cff"
+	include "Alignment/MillePedeAlignmentAlgorithm/test/files_AlCaReco_ZToMuMu-NoPU.cff"
+#	untracked vstring fileNames = { 
+#            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_1_50000.root',
+#            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_100000_150000.root'
+#        }
  	untracked int32 maxEvents   = EVTS_PER_JOB  # -1
 	untracked uint32 skipEvents = SKIP_EVTS
     }
