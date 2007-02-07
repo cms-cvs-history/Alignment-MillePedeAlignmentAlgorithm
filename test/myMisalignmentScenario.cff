@@ -1,25 +1,15 @@
 replace AlignmentProducer.MisalignmentScenario = {
-       # FIXME using MisalignmentScenarioSettings # does not work in 1_0_6
-    untracked bool dumpBefore  = false  // This is actually the default
-    untracked bool dumpAfter   = false  // This is actually the default
-    untracked bool saveToDbase = false  // This is actually the default
-      
-    string distribution = 'gaussian'
-    int32 seed = 1234567
-    bool  setError = true
-    
-    bool setRotations = true
-    bool setTranslations = true
-    #FIXME end
+# block BarrelRodsSensitiveParFixedTOBLayer6Scenario = {
+    using MisalignmentScenarioSettings # need to replace: setError = false
     
     PSet TIBs = { # no rotations, move rods in sensitive directions
 	string distribution = 'flat'
 	PSet BarrelLayers = {
 	    PSet Rods = { 
 		# double dXlocal = 0.02 double dYlocal = -0.05 double dZlocal = 0.01
-		# double localX = 0.002 double localY = 0.0006 double localZ = -0.02
+		# double localX = 0.002 double localY = 0.0006 double phiZlocal = -0.02
 		double dXlocal = 0.03  double dZlocal = 0.035 
-		double localZ = 0.0002
+		double phiZlocal = 0.0002
 	    }
 	}
 	PSet BarrelLayer1 = {
@@ -39,7 +29,7 @@ replace AlignmentProducer.MisalignmentScenario = {
 	PSet BarrelLayers = {
 	    PSet Rods = {
 		double dXlocal = 0.04  double dZlocal = 0.02
-		double localZ = 0.0004
+		double phiZlocal = 0.0004
 	    }
 	}
 	PSet BarrelLayer1 = {
@@ -49,7 +39,7 @@ replace AlignmentProducer.MisalignmentScenario = {
 	    PSet Rods = { double dYlocal = 0.035 }
 	}
 	PSet BarrelLayer6 = { # fix it
-	    PSet Rods = { double dXlocal = 0. double dZlocal = 0. double localZ = 0.}
+	    PSet Rods = { double dXlocal = 0. double dZlocal = 0. double phiZlocal = 0.}
 	}
     }
 }
