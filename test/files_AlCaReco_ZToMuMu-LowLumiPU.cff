@@ -1,0 +1,26 @@
+# Files produced using Configuration/Examples/data/AlCaReco.cfg from CERN files of
+# http://cmsdbs.cern.ch/discovery/getData?dbsInst=MCGlobal/Writer&site=All&app=/CMSSW_1_2_0/
+#                               FEVT/cmsRun&primD=mc-physval-120-ZToMuMu-LowLumiPU&tier=All&ajax=0
+# Some files had to be excluded.
+# 802600 events originally reported to be in source.
+# After exclusion of corrupt files and filtering (2 'high' pt tracks required):
+# 730533 events left:
+untracked vstring fileNames = {
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_1_150.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_151_300.root",
+    # following file without corrupt /castor/cern.ch/cms/store/mc/2006/12/22/mc-physval-120-ZToMuMu-LowLumiPU/0022/36DC6E07-24A3-DB11-9587-00304875AA55.root
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_301_450.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_451_600.root",
+    # following file without corrupt /castor/cern.ch/cms/store/mc/2006/12/22/mc-physval-120-ZToMuMu-LowLumiPU/0022/9A5E340F-5CA3-DB11-9A08-00304870DECD.root
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_601_750.root",
+    # following file without corrupt /castor/cern.ch/cms/store/mc/2006/12/22/mc-physval-120-ZToMuMu-LowLumiPU/0022/EA7983C0-40A3-DB11-9B7F-003048769D4D.root
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_751_900.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_901_1050.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_1051_1200.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_1201_1350.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_1351_1500.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_1501_1650.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_1651_1800.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_1801_1950.root",
+    "rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/ZToMuMu-LowLumiPU/AlCaRecoZMuMu_1951_2017.root"
+}
