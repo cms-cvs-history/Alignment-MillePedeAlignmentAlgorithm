@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.3 $ from $Date: 2007/01/26 11:43:16 $ by $Author: flucke $
+# $Revision: 1.4 $ from $Date: 2007/02/07 16:56:09 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -51,8 +51,8 @@ INPUTTAG=AlCaRecoCSA06ZMuMu
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBSSRodsLayers66,ffffff\""
 #ALIGN_SEL=${ALIGN_SEL}", \"PixelHalfBarrelLayers,ffffff\""
 # NOTE 2006/11 A
-#ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
-ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""  # fix pixel
+#ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""  # fix pixel
+ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
 ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsDS,111001,geomSel\"" # 4 params for double sided barrel
 ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,1f1001,geomSel\""   # fix global z/local y for...
 ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001,geomSel\"" #  ...single sided TIB and TOB
@@ -233,9 +233,14 @@ process Alignment = {
         untracked string monitorFile = "millePedeMonitorSUFFIX.root" # if empty: no monitoring
 
         PSet pedeSteerer = {
-            string steerFile = "pedeSteerSUFFIX" # file without txt ending
-            untracked string pedeCommand = "~flucke/cms/pede/myWork_based_orig/pede -ilc6"
+            string steerFile = "pedeSteerSUFFIX" # beginning of steering file names
+            untracked string pedeCommand = "~flucke/cms/pede/vers20070124/pede"
             untracked string pedeDump = "pedeSUFFIX.dump"
+	    string method = "inversion  3  0.1" # <method>  n(iter)  Delta(F)
+	    vstring outlier = {"chisqcut  6.0  2.5", 
+		               "outlierdownweighting 3",
+		               "dwfractioncut 0.1"}
+	    vstring options = {}
         }
         int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
 	bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivs
@@ -294,7 +299,7 @@ cat >! $NAME.sh <<EOF2
 
 date
 echo The local directory is \$(pwd)
-
+echo old CMSSW_BASE: \$CMSSW_BASE
 ############################################################
 ###
 ### Setup environment.
