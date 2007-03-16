@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.4 $ from $Date: 2007/02/07 16:56:09 $ by $Author: flucke $
+# $Revision: 1.5 $ from $Date: 2007/02/13 12:03:11 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -45,20 +45,29 @@ CP_RESULT_OPT="-r"
 SUBMIT_DIR=${HOME}/scratch0/submit/${OUT_DIR}
 
 INPUTTAG=AlCaRecoCSA06ZMuMu
-# CSA06
+## CSA06
 #ALIGN_SEL="\"TOBDSRods,111111\",\"TOBSSRodsLayers15,1ff111\""
 #ALIGN_SEL=${ALIGN_SEL}", \"TIBDSDets,111111\", \"TIBSSDets,1ff111\""
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBSSRodsLayers66,ffffff\""
 #ALIGN_SEL=${ALIGN_SEL}", \"PixelHalfBarrelLayers,ffffff\""
-# NOTE 2006/11 A
+## NOTE 2006/11 A with hierarchy
+#ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers12,111001\"" # 4 params for double sided barrel
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers35,1f1001\"" # 3 params for single sided barrel
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,cfc00c\"" # (except of fixed last layer)
+## NOTE 2006/11 A
 #ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""  # fix pixel
 ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
 ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsDS,111001,geomSel\"" # 4 params for double sided barrel
 ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,1f1001,geomSel\""   # fix global z/local y for...
 ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001,geomSel\"" #  ...single sided TIB and TOB
 ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
-#echo fix TOB Layer6 at 0
-#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,fff00f,geomSel\"" # (except of fixed last layer)
+## private mix Rod
+#ALIGN_SEL="\"PixelHalfBarrelLadders,111001\""  # fix pixel
+#ALIGN_SEL=${ALIGN_SEL}", \"TIBRods,fff00f,geomSel\""   # fix global z/local y for...
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers12,111001,geomSel\"" #  ...single sided TIB and TOB
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers35,1f1001,geomSel\"" #  ...single sided TIB and TOB
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
 
 # NOTE 2006/11 B(?)
 #ALIGN_SEL="\"PixelHalfBarrelLayers,ccc00c\""  # fix pixel
@@ -102,7 +111,8 @@ ALIGN_Z_SEL2="" # empty array means no restriction:
 ALIGN_R_SEL2=""
 ALIGN_PHI_SEL2="1.55, 1.63"
 
-DO_MISALIGN=true #false# echo NO misalignment!
+DO_MISALIGN=false
+# echo NO misalignment!
 
 ############################################################
 ###
@@ -172,7 +182,7 @@ process Alignment = {
         InputTag src = $INPUTTAG # FIXME: templetise?
         bool filter = false
         bool applyBasicCuts = true
-        double ptMin   = 10. #5. 
+        double ptMin   = 15. #10. #5. 
         double ptMax   = 999.
         double etaMin  = -2.4.
         double etaMax  =  2.4.
@@ -208,10 +218,12 @@ process Alignment = {
     replace AlignmentProducer.doMisalignmentScenario = $DO_MISALIGN
     replace MisalignmentScenarioSettings.setError = false 
     replace AlignmentProducer.MisalignmentScenario.TPBs.scale = 0.
+#    replace AlignmentProducer.MisalignmentScenario.TPBs.Dets = { double scale = 0.}
     replace AlignmentProducer.MisalignmentScenario.TPEs.scale = 0.
     replace AlignmentProducer.MisalignmentScenario.TECs.scale = 0.
     replace AlignmentProducer.MisalignmentScenario.TIDs.scale = 0.
     replace AlignmentProducer.MisalignmentScenario.TIBs.Dets = { double scale = 0.}
+##    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
 ##    replace AlignmentProducer.MisalignmentScenario.TIBs.phiZ = 0.
 ##    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
     replace AlignmentProducer.MisalignmentScenario.TOBs.Dets = { double scale = 0.}
@@ -234,13 +246,19 @@ process Alignment = {
 
         PSet pedeSteerer = {
             string steerFile = "pedeSteerSUFFIX" # beginning of steering file names
+	    string pedeReadFile = "millepede.res"
             untracked string pedeCommand = "~flucke/cms/pede/vers20070124/pede"
             untracked string pedeDump = "pedeSUFFIX.dump"
-	    string method = "inversion  3  0.1" # <method>  n(iter)  Delta(F)
-	    vstring outlier = {"chisqcut  6.0  2.5", 
-		               "outlierdownweighting 3",
-		               "dwfractioncut 0.1"}
+	    string method = "inversion  9  0.1" # <method>  n(iter)  Delta(F)
+	    vstring outlier = { "chisqcut  9.0  4.5" #, 
+		               # "outlierdownweighting 3",
+		               # "dwfractioncut 0.1"
+                              }
 	    vstring options = {}
+        }
+        PSet pedeReader = {
+	    string readFile = "millepede.res"
+            untracked string fileDir = "" # directory of 'readFile', if empty: take from pedeSteerer
         }
         int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
 	bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivs
@@ -248,6 +266,8 @@ process Alignment = {
 
     include "Alignment/CommonAlignmentProducer/data/AlignmentProducerRefitting.cff"
     replace TrackRefitter.src = "AlignmentTracks"
+    replace TrackRefitter.TTRHBuilder = "WithoutRefit"
+    replace TrackRefitter.TrajectoryInEvent = true
     
     # input file
     # source = EmptySource {untracked int32 maxEvents = EVTS_PER_JOB}
