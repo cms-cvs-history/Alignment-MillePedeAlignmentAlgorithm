@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.4 $
- *  $Date: 2007/03/16 17:00:14 $
+ *  $Revision: 1.6 $
+ *  $Date: 2007/04/05 16:33:20 $
  *  (last update by $Author: flucke $)
  */
 
@@ -21,7 +21,7 @@
 #include <Geometry/CommonDetUnit/interface/GeomDetType.h>
 
 #include "Alignment/CommonAlignment/interface/Alignable.h"
-#include "Alignment/CommonAlignment/interface/AlignableDet.h"
+#include "Alignment/CommonAlignment/interface/AlignableDetOrUnitPtr.h"
 #include "Alignment/CommonAlignmentParametrization/interface/FrameToFrameDerivative.h"
 
 #include <TH1.h>
@@ -586,7 +586,7 @@ void MillePedeMonitor::fillMille(const ConstRecHitPointer &recHit,
 }
 
 //____________________________________________________________________
-void MillePedeMonitor::fillFrameToFrame(AlignableDet *aliDet, Alignable *ali)
+void MillePedeMonitor::fillFrameToFrame(const AlignableDetOrUnitPtr &aliDet, const Alignable *ali)
 {
   // get derivative of higher level structure w.r.t. det
   FrameToFrameDerivative ftfd;
