@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.5 $ from $Date: 2007/02/13 12:03:11 $ by $Author: flucke $
+# $Revision: 1.6 $ from $Date: 2007/03/16 17:19:40 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -32,7 +32,7 @@ BSUB_OPT_R=cmsalca #"\"type==SLC3&&swp>500&&pool>1000\""
 #QUEUE=1nh
 #BSUB_OPT_R="type==SLC3&&swp>450&&pool>750"
 
-CMSSW_VERS=CMSSW_1_2_0
+CMSSW_VERS=CMSSW_1_3_1
 BASE_DIR=${HOME}/scratch0/${CMSSW_VERS}
 
 OUT_DIR=$JOB_NAME
@@ -44,24 +44,33 @@ CP_RESULT_OPT="-r"
 # Must be cd-able (scripts are copied here and executed):
 SUBMIT_DIR=${HOME}/scratch0/submit/${OUT_DIR}
 
-INPUTTAG=AlCaRecoCSA06ZMuMu
+INPUTTAG=ctfWithMaterialTracks #AlCaRecoCSA06ZMuMu
 ## CSA06
 #ALIGN_SEL="\"TOBDSRods,111111\",\"TOBSSRodsLayers15,1ff111\""
 #ALIGN_SEL=${ALIGN_SEL}", \"TIBDSDets,111111\", \"TIBSSDets,1ff111\""
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBSSRodsLayers66,ffffff\""
 #ALIGN_SEL=${ALIGN_SEL}", \"PixelHalfBarrelLayers,ffffff\""
+
 ## NOTE 2006/11 A with hierarchy
 #ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
 #ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers12,111001\"" # 4 params for double sided barrel
 #ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers35,1f1001\"" # 3 params for single sided barrel
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,cfc00c\"" # (except of fixed last layer)
+
 ## NOTE 2006/11 A
 #ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""  # fix pixel
-ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
-ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsDS,111001,geomSel\"" # 4 params for double sided barrel
-ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,1f1001,geomSel\""   # fix global z/local y for...
-ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001,geomSel\"" #  ...single sided TIB and TOB
-ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
+#ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsDS,111001,geomSel\"" # 4 params for double sided barrel
+#ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,1f1001,geomSel\""   # fix global z/local y for...
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001,geomSel\"" #  ...single sided TIB and TOB
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
+
+ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""
+ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsDS,111001\""
+ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,101001\""
+ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsDS,ccc00c\""
+ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSS,c0c00c\""
+
 ## private mix Rod
 #ALIGN_SEL="\"PixelHalfBarrelLadders,111001\""  # fix pixel
 #ALIGN_SEL=${ALIGN_SEL}", \"TIBRods,fff00f,geomSel\""   # fix global z/local y for...
@@ -111,7 +120,7 @@ ALIGN_Z_SEL2="" # empty array means no restriction:
 ALIGN_R_SEL2=""
 ALIGN_PHI_SEL2="1.55, 1.63"
 
-DO_MISALIGN=false
+DO_MISALIGN=true
 # echo NO misalignment!
 
 ############################################################
@@ -182,10 +191,10 @@ process Alignment = {
         InputTag src = $INPUTTAG # FIXME: templetise?
         bool filter = false
         bool applyBasicCuts = true
-        double ptMin   = 15. #10. #5. 
+        double ptMin   = 10. #5. 
         double ptMax   = 999.
-        double etaMin  = -2.4.
-        double etaMax  =  2.4.
+        double etaMin  = -2.4
+        double etaMax  =  2.4
         double phiMin  = -3.1416
         double phiMax  =  3.1416
         double nHitMin = 10
@@ -199,7 +208,6 @@ process Alignment = {
     
     # Alignment producer
     include "Alignment/TrackerAlignment/data/Scenarios.cff"
-#    replace MisalignmentScenarioSettings.setError = false # replace in block defined abouve
     include "Alignment/CommonAlignmentProducer/data/AlignmentProducer.cff"
     replace AlignmentProducer.ParameterBuilder.Selector = {
         vstring alignParams = {
@@ -216,7 +224,7 @@ process Alignment = {
     }
 
     replace AlignmentProducer.doMisalignmentScenario = $DO_MISALIGN
-    replace MisalignmentScenarioSettings.setError = false 
+    replace MisalignmentScenarioSettings.setError = false #replace in block defined Scenarios.cff
     replace AlignmentProducer.MisalignmentScenario.TPBs.scale = 0.
 #    replace AlignmentProducer.MisalignmentScenario.TPBs.Dets = { double scale = 0.}
     replace AlignmentProducer.MisalignmentScenario.TPEs.scale = 0.
@@ -246,10 +254,9 @@ process Alignment = {
 
         PSet pedeSteerer = {
             string steerFile = "pedeSteerSUFFIX" # beginning of steering file names
-	    string pedeReadFile = "millepede.res"
-            untracked string pedeCommand = "~flucke/cms/pede/vers20070124/pede"
+            untracked string pedeCommand = "/afs/cern.ch/user/f/flucke/cms/pede/vers20070410/pede"
             untracked string pedeDump = "pedeSUFFIX.dump"
-	    string method = "inversion  9  0.1" # <method>  n(iter)  Delta(F)
+	    string method = "inversion  9  0.8" # <method>  n(iter)  Delta(F)
 	    vstring outlier = { "chisqcut  9.0  4.5" #, 
 		               # "outlierdownweighting 3",
 		               # "dwfractioncut 0.1"
@@ -264,24 +271,28 @@ process Alignment = {
 	bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivs
     }
 
-    include "Alignment/CommonAlignmentProducer/data/AlignmentProducerRefitting.cff"
+# refitting for normal tracks...
+    include "RecoTracker/TrackProducer/data/RefitterWithMaterial.cff"
+    include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilderWithoutRefit.cfi"
     replace TrackRefitter.src = "AlignmentTracks"
-    replace TrackRefitter.TTRHBuilder = "WithoutRefit"
     replace TrackRefitter.TrajectoryInEvent = true
+    replace TrackRefitter.TTRHBuilder = "WithoutRefit"# TransientTrackingRecHitBuilder: no refit of hits...
+    replace ttrhbwor.Matcher = "StandardMatcher" # ... but with matching for strip stereo!
     
     # input file
     # source = EmptySource {untracked int32 maxEvents = EVTS_PER_JOB}
     source = PoolSource { 
 #	include "Alignment/MillePedeAlignmentAlgorithm/test/files_AlCaReco_ZToMuMu-LowLumiPU.cff"
-	include "Alignment/MillePedeAlignmentAlgorithm/test/files_AlCaReco_ZToMuMu-NoPU.cff"
-#	untracked vstring fileNames = { 
+#	include "Alignment/MillePedeAlignmentAlgorithm/test/files_AlCaReco_ZToMuMu-NoPU.cff"
+	untracked vstring fileNames = { 
 #            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_1_50000.root',
 #            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_100000_150000.root'
-#        }
+        }
  	untracked int32 maxEvents   = EVTS_PER_JOB  # -1
 	untracked uint32 skipEvents = SKIP_EVTS
     }
-    
+    include "Alignment/MillePedeAlignmentAlgorithm/test/RERECO_131_mutracks_1_202_all.cff"
+
     path p = { AlignmentTracks, TrackRefitter }
 
 }
