@@ -1,10 +1,10 @@
 #!/bin/zsh 
-# $Revision: 1.6 $ from $Date: 2007/03/16 17:19:40 $ by $Author: flucke $
+# $Revision: 1.6.2.1 $ from $Date: 2007/05/04 12:00:58 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
     echo "syntax:"
-    echo "       $0 JobName evts_per_job max_evts [first_evt]" 
+    echo "       $0 JobName evts/files_per_job max_evts/files [first_evt/files]" 
     echo "Before using this script properly:"
     echo "  Edit it and set a couple of variables in the general settings!"
     echo
@@ -12,9 +12,9 @@ if  [ $# -lt 3 -o $# -gt 4 ]; then
 fi
 
 JOB_NAME=$1
-EVTS_PER_JOB=$2
-ALL_EVTS=$3
-FIRST_EVT=0
+integer EVTS_PER_JOB=$2
+integer ALL_EVTS=$3
+integer FIRST_EVT=0
 if [ $# = 4 ]; then
     FIRST_EVT=$4
 fi
@@ -24,6 +24,19 @@ fi
 ### General settings.
 ###
 ############################################################
+
+#FILES_FILE=RERECO_131_mutracks_1_202.txt # file where to find file names to run on. 
+FILES_FILE=RERECO_131_mutracks_1_202_merged.txt # file where to find file names to run on. 
+            # if empty: assume files in cfg and select via events
+if [ $#FILES_FILE != 0 ]; then
+    integer FILES_PER_JOB=$EVTS_PER_JOB
+    EVTS_PER_JOB=-1
+#    integer ALL_FILES=$ALL_EVTS
+    integer FIRST_FILE=$FIRST_EVT
+    FIRST_EVT=0
+    ALL_FILES_ARRAY=(`cat $FILES_FILE | grep -v "^\#"`) # exclude only lines starting with '#'
+fi 
+echo $ALL_FILES_ARRAY
 
 # FIXME: 
 # These switches between normal and dedicated queue don't work fully automatically, cf. below!
@@ -282,16 +295,14 @@ process Alignment = {
     # input file
     # source = EmptySource {untracked int32 maxEvents = EVTS_PER_JOB}
     source = PoolSource { 
-#	include "Alignment/MillePedeAlignmentAlgorithm/test/files_AlCaReco_ZToMuMu-LowLumiPU.cff"
-#	include "Alignment/MillePedeAlignmentAlgorithm/test/files_AlCaReco_ZToMuMu-NoPU.cff"
 	untracked vstring fileNames = { 
-#            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_1_50000.root',
-#            'rfio:/castor/cern.ch/user/f/flucke/alignment/AlCaReco/CMSSW_1_2_0/CSA06ZMuMu/AlCaRecoCMSSW_1_0_6-CSA06ZMuMu_100000_150000.root'
+	  "rfio:/castor/cern.ch/user/r/rwolf/mc-physval-120-ZToMuMu-NoPU/RERECO_131_mutracks_54.root"
         }
  	untracked int32 maxEvents   = EVTS_PER_JOB  # -1
 	untracked uint32 skipEvents = SKIP_EVTS
     }
-    include "Alignment/MillePedeAlignmentAlgorithm/test/RERECO_131_mutracks_1_202_all.cff"
+#    include "Alignment/MillePedeAlignmentAlgorithm/test/RERECO_131_mutracks_1_202_all.cff"
+    FILE_REPLACE
 
     path p = { AlignmentTracks, TrackRefitter }
 
@@ -308,10 +319,35 @@ $CP_RESULT $CP_RESULT_OPT $CONFIG_TEMPLATE $RESULTDIR #> /dev/null
 ALL_BINARY_FILES=() # empty array
 ALL_TREE_FILES=()   # empty array
 integer ROUND=1
+integer LAST_ROUND=$ROUND # just initialise with some number...
+if [ $#FILES_FILE != 0 ]; then  
+    LAST_ROUND=$[$[$#ALL_FILES_ARRAY-1]/$FILES_PER_JOB]+1
+    if [ $LAST_ROUND -gt $[$[$ALL_EVTS-1]/$FILES_PER_JOB]+1 ]; then 
+	LAST_ROUND=$[$[$ALL_EVTS-1]/$FILES_PER_JOB]+1
+    fi
+else
+    LAST_ROUND=$ALL_EVTS/$EVTS_PER_JOB
+fi
 SKIP_EVTS=$FIRST_EVT
 
-while [ $SKIP_EVTS -lt $ALL_EVTS ]; do
-SUFFIX=_${SKIP_EVTS}
+#while [ $SKIP_EVTS -lt $ALL_EVTS ]; do
+while [ $ROUND -le $LAST_ROUND ]; do
+FILE_REPLACE=
+if [ $#FILES_FILE != 0 ]; then
+    FILE_REPLACE="replace PoolSource.fileNames = {"
+    integer COUNTER=$[$[$ROUND-1]*$FILES_PER_JOB]+1
+    integer CURRENT_LAST_FILE=$[$[$COUNTER+$FILES_PER_JOB]-1]
+    if [ $ALL_EVTS -lt $CURRENT_LAST_FILE ]; then ; CURRENT_LAST_FILE=$ALL_EVTS; fi
+    if [ $#ALL_FILES_ARRAY -lt $CURRENT_LAST_FILE ]; then ; CURRENT_LAST_FILE=$#ALL_FILES_ARRAY; fi
+    while [ $COUNTER -le $CURRENT_LAST_FILE ]; do
+	FILE_REPLACE=${FILE_REPLACE}"\n\\\"$ALL_FILES_ARRAY[$COUNTER]\\\""
+	if [ $COUNTER -lt $CURRENT_LAST_FILE ]; then; FILE_REPLACE=${FILE_REPLACE}, ; fi
+	COUNTER=$COUNTER+1
+    done
+    FILE_REPLACE=${FILE_REPLACE}"\n}"
+fi
+
+SUFFIX=_${ROUND}
 NAME=${OUT_DIR}${SUFFIX}  #mille${SUFFIX}
 CONFIG=alignment${SUFFIX}.cfg
 LOGFILE=alignment${SUFFIX}.log
@@ -370,7 +406,8 @@ sed -e "s|MERGE_BINARY_FILES||g"        ${CONFIG}4.tmp > ${CONFIG}5.tmp
 sed -e "s|SUFFIX|$SUFFIX|g"             ${CONFIG}5.tmp > ${CONFIG}6.tmp
 sed -e "s|EVTS_PER_JOB|$EVTS_PER_JOB|g" ${CONFIG}6.tmp > ${CONFIG}7.tmp
 sed -e "s|SKIP_EVTS|$SKIP_EVTS|g"       ${CONFIG}7.tmp > ${CONFIG}8.tmp
-sed -e "s|MODE|mille|g"                 ${CONFIG}8.tmp > ${CONFIG}
+sed -e "s|FILE_REPLACE|$FILE_REPLACE|g" ${CONFIG}8.tmp > ${CONFIG}9.tmp
+sed -e "s|MODE|mille|g"                 ${CONFIG}9.tmp > ${CONFIG}
 rm ${CONFIG}[0-9].tmp
 
 ############################################################
@@ -430,8 +467,10 @@ else
     echo Copied script $NAME.sh to $RESULTDIR .
 fi
 
-SKIP_EVTS=$[$SKIP_EVTS+$EVTS_PER_JOB]
-ROUND=$ROUND+1 
+if [ $#FILES_FILE -eq 0 ]; then
+    SKIP_EVTS=$[$SKIP_EVTS+$EVTS_PER_JOB]
+fi
+ROUND=$[$ROUND+1]
 sleep 20
 done # while loop
 
@@ -461,7 +500,8 @@ sed -e "s|MERGE_BINARY_FILES|$BINARY_FILES|g"   ${CONFIG}4.tmp > ${CONFIG}5.tmp
 sed -e "s|SUFFIX|_merge|g"                      ${CONFIG}5.tmp > ${CONFIG}6.tmp
 sed -e "s|EVTS_PER_JOB|0|g"                     ${CONFIG}6.tmp > ${CONFIG}7.tmp
 sed -e "s|SKIP_EVTS|0|g"                        ${CONFIG}7.tmp > ${CONFIG}8.tmp
-sed -e "s|MODE|pede|g"                          ${CONFIG}8.tmp > alignment_merge.cfg
+sed -e "s|FILE_REPLACE||g"                      ${CONFIG}8.tmp > ${CONFIG}9.tmp
+sed -e "s|MODE|pede|g"                          ${CONFIG}9.tmp > alignment_merge.cfg
 rm ${CONFIG}[0-9].tmp
 $CP_RESULT $CP_RESULT_OPT alignment_merge.cfg $RESULTDIR #> /dev/null
 rm $CONFIG_TEMPLATE
