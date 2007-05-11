@@ -18,7 +18,7 @@ block MillePedeAlignmentAlgorithm = {
     untracked string monitorFile = "millePedeMonitor.root" # if empty: no monitoring...
 
     PSet pedeSteerer = {
-	# NOTE: All file names get the directory from 'MillePedeAlignmentAlgorithm.fileDir'. #FIXME
+	untracked string fileDir = "" # if empty: taken from 'MillePedeAlignmentAlgorithm.fileDir'
 	string steerFile = "pedeSteer" # beginning of steering file names
 	# If MillePedeAlignmentAlgorithm.mode causes pede to run (e.g. 'full', 'pede' etc.),
 	# the pede command line is constructed as:
@@ -40,6 +40,12 @@ block MillePedeAlignmentAlgorithm = {
 	# There "TOBRodsSSLayers66,1cf000" means for the single sided rods of TOB layer 6:
 	# Use local x as free parameter, fix local y at true value and local z at 0 
         # and ignore the angles. 
+
+	# Parameters that would be automatically detected to be subcomponent of a hierarchy,
+	# but should be taken as standalone.
+	# Syntax as for AlignmentProducer.ParameterBuilder.Selector, all but '0' same meaning.
+	# (Limitation: Not guarantied to work if not _all_ parameters of an Alignable* are chosen!
+	PSet noHierarchyConstraint = { vstring alignParams = {} }
     }
     PSet pedeReader = {
         string readFile = "millepede.res"
