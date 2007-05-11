@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.6.2.1 $ from $Date: 2007/05/04 12:00:58 $ by $Author: flucke $
+# $Revision: 1.6.2.2 $ from $Date: 2007/05/08 09:51:56 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -25,6 +25,7 @@ fi
 ###
 ############################################################
 
+DO_SUBMIT=1 # if 0, do all but commit jobs
 #FILES_FILE=RERECO_131_mutracks_1_202.txt # file where to find file names to run on. 
 FILES_FILE=RERECO_131_mutracks_1_202_merged.txt # file where to find file names to run on. 
             # if empty: assume files in cfg and select via events
@@ -35,8 +36,10 @@ if [ $#FILES_FILE != 0 ]; then
     integer FIRST_FILE=$FIRST_EVT
     FIRST_EVT=0
     ALL_FILES_ARRAY=(`cat $FILES_FILE | grep -v "^\#"`) # exclude only lines starting with '#'
+    echo Split jobs on file level!
+else
+    echo Split jobs on event level!
 fi 
-echo $ALL_FILES_ARRAY
 
 # FIXME: 
 # These switches between normal and dedicated queue don't work fully automatically, cf. below!
@@ -48,7 +51,7 @@ BSUB_OPT_R=cmsalca #"\"type==SLC3&&swp>500&&pool>1000\""
 CMSSW_VERS=CMSSW_1_3_1
 BASE_DIR=${HOME}/scratch0/${CMSSW_VERS}
 
-OUT_DIR=$JOB_NAME
+OUT_DIR=$JOB_NAME # directory 
 RESULTHOST=pccmsuhh04
 RESULTDIR=$RESULTHOST:/scratch/flucke/lxbatch/$OUT_DIR
 CP_RESULT=scp
@@ -65,10 +68,13 @@ INPUTTAG=ctfWithMaterialTracks #AlCaRecoCSA06ZMuMu
 #ALIGN_SEL=${ALIGN_SEL}", \"PixelHalfBarrelLayers,ffffff\""
 
 ## NOTE 2006/11 A with hierarchy
-#ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
-#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers12,111001\"" # 4 params for double sided barrel
-#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers35,1f1001\"" # 3 params for single sided barrel
-#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,cfc00c\"" # (except of fixed last layer)
+ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
+ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers12,111001\"" # 4 params for double sided barrel
+ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers35,101001\"" # 3 params for single sided barrel
+ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,c0c00c\"" # (except of fixed last layer)
+ALIGN_SEL=${ALIGN_SEL}", \"TIBHalfBarrels,111001\""
+ALIGN_SEL=${ALIGN_SEL}", \"TOBHalfBarrels,111001\""
+NOT_CONSTRAIN_SEL=\"TOBRodsLayers66,111111\"
 
 ## NOTE 2006/11 A
 #ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""  # fix pixel
@@ -78,11 +84,17 @@ INPUTTAG=ctfWithMaterialTracks #AlCaRecoCSA06ZMuMu
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001,geomSel\"" #  ...single sided TIB and TOB
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
 
-ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""
-ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsDS,111001\""
-ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,101001\""
-ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsDS,ccc00c\""
-ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSS,c0c00c\""
+#ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelLayersSS,110000\""
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelLayersDS,111000\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBHalfBarrels,111000\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TIBHalfBarrels,111000\""
+
+#ALIGN_SEL=${ALIGN_SEL}", \"TIBDetsLayers11,111001\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,101001\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsDS,111001\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers35,101001\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,c0c00c\""
 
 ## private mix Rod
 #ALIGN_SEL="\"PixelHalfBarrelLadders,111001\""  # fix pixel
@@ -128,13 +140,12 @@ ALIGN_Z_SEL="" # empty array means no restriction:
 ALIGN_R_SEL=""
 ALIGN_PHI_SEL= #"1.63, 1.55" 
 #... and PSet geomSel2
-ALIGN_ETA_SEL2="-0.9, 0.9" 
+ALIGN_ETA_SEL2="-999., -0.9, 0.9, 999." 
 ALIGN_Z_SEL2="" # empty array means no restriction: 
 ALIGN_R_SEL2=""
-ALIGN_PHI_SEL2="1.55, 1.63"
+ALIGN_PHI_SEL2= #"1.55, 1.63"
 
-DO_MISALIGN=true
-# echo NO misalignment!
+DO_MISALIGN=true # false echo NO misalignment!
 
 ############################################################
 ###
@@ -246,43 +257,35 @@ process Alignment = {
     replace AlignmentProducer.MisalignmentScenario.TIBs.Dets = { double scale = 0.}
 ##    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
 ##    replace AlignmentProducer.MisalignmentScenario.TIBs.phiZ = 0.
-##    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
+#    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
     replace AlignmentProducer.MisalignmentScenario.TOBs.Dets = { double scale = 0.}
 ##    replace AlignmentProducer.MisalignmentScenario.TOBs.phiZ = 0.
 ##    replace AlignmentProducer.MisalignmentScenario.TOBs.scale = 0.
 #   replaces AlignmentProducer.MisalignmentScenario:
 #    include "Alignment/MillePedeAlignmentAlgorithm/test/myMisalignmentScenario.cff"
+#    include "Alignment/MillePedeAlignmentAlgorithm/test/MisalignBarrelLayer.cff" 
+#    replace AlignmentProducer.MisalignmentScenario = {
+#	using MisalignBarrelLayer # setError already false!
+#    }
     replace AlignmentProducer.algoConfig = {
-	# using MillePedeAlignmentAlgorithm
-	string algoName = "MillePedeAlignmentAlgorithm"
-	untracked string mode = "MODE" # full, mille, pede, pedeSteer, pedeRun or pedeRead
-
-        untracked string fileDir = "OUT_DIR"
-
-        string binaryFile = "ONE_BINARY_FILE"
-        vstring mergeBinaryFiles = {MERGE_BINARY_FILES}
-        string treeFile   = "ONE_TREE_FILE"
-        vstring mergeTreeFiles   = {MERGE_TREE_FILES}
-        untracked string monitorFile = "millePedeMonitorSUFFIX.root" # if empty: no monitoring
-
-        PSet pedeSteerer = {
-            string steerFile = "pedeSteerSUFFIX" # beginning of steering file names
-            untracked string pedeCommand = "/afs/cern.ch/user/f/flucke/cms/pede/vers20070410/pede"
-            untracked string pedeDump = "pedeSUFFIX.dump"
-	    string method = "inversion  9  0.8" # <method>  n(iter)  Delta(F)
-	    vstring outlier = { "chisqcut  9.0  4.5" #, 
-		               # "outlierdownweighting 3",
-		               # "dwfractioncut 0.1"
-                              }
-	    vstring options = {}
-        }
-        PSet pedeReader = {
-	    string readFile = "millepede.res"
-            untracked string fileDir = "" # directory of 'readFile', if empty: take from pedeSteerer
-        }
-        int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
-	bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivs
+	using MillePedeAlignmentAlgorithm
     }
+    replace MillePedeAlignmentAlgorithm.mode = "MODE"
+    replace MillePedeAlignmentAlgorithm.fileDir = "OUT_DIR"
+    replace MillePedeAlignmentAlgorithm.binaryFile = "ONE_BINARY_FILE"
+    replace MillePedeAlignmentAlgorithm.mergeBinaryFiles = {MERGE_BINARY_FILES}
+    replace MillePedeAlignmentAlgorithm.treeFile = "ONE_TREE_FILE"
+    replace MillePedeAlignmentAlgorithm.mergeTreeFiles = {MERGE_TREE_FILES}
+    replace MillePedeAlignmentAlgorithm.monitorFile = "millePedeMonitorSUFFIX.root"
+
+    replace MillePedeAlignmentAlgorithm.pedeSteerer.steerFile = "pedeSteerSUFFIX"
+    replace MillePedeAlignmentAlgorithm.pedeSteerer.pedeDump = "pedeSUFFIX.dump"
+    replace MillePedeAlignmentAlgorithm.pedeSteerer.method = "inversion  9  0.8"
+    replace MillePedeAlignmentAlgorithm.pedeSteerer.outlier = {
+	 "chisqcut  9.0  4.5" }  #{ "outlierdownweighting 3", "dwfractioncut 0.1" }
+    replace MillePedeAlignmentAlgorithm.pedeSteerer.noHierarchyConstraint = {
+	    vstring alignParams = { $NOT_CONSTRAIN_SEL }
+	}
 
 # refitting for normal tracks...
     include "RecoTracker/TrackProducer/data/RefitterWithMaterial.cff"
@@ -296,9 +299,9 @@ process Alignment = {
     # source = EmptySource {untracked int32 maxEvents = EVTS_PER_JOB}
     source = PoolSource { 
 	untracked vstring fileNames = { 
-	  "rfio:/castor/cern.ch/user/r/rwolf/mc-physval-120-ZToMuMu-NoPU/RERECO_131_mutracks_54.root"
+	    "rfio:/castor/cern.ch/user/r/rwolf/mc-physval-120-ZToMuMu-NoPU/RERECO_131_mutracks_151_202.root"
         }
- 	untracked int32 maxEvents   = EVTS_PER_JOB  # -1
+ 	untracked int32 maxEvents   = EVTS_PER_JOB
 	untracked uint32 skipEvents = SKIP_EVTS
     }
 #    include "Alignment/MillePedeAlignmentAlgorithm/test/RERECO_131_mutracks_1_202_all.cff"
@@ -444,7 +447,9 @@ done
 echo
 date
 
-exit \${COPY_PROBLEMS}
+if [ $DO_SUBMIT -ne 0 ]; then
+ exit \${COPY_PROBLEMS}
+fi
 EOF2
 
 ############################################################
@@ -454,10 +459,14 @@ EOF2
 ############################################################
 
 chmod 740 $NAME.sh # make executable
-# FIXME: $BSUB_OPT_R replacement doe snot work properly!
+# FIXME: $BSUB_OPT_R replacement does not work properly!
 #bsub -J $NAME -R "$BSUB_OPT_R" -q $QUEUE $NAME.sh  # for SLC3&&...
 #bsub -J $NAME -R $BSUB_OPT_R -q $QUEUE $NAME.sh    # for cmsalca
-`echo $FULL_SUB_COMMAND` #echo not submitted
+if [ $DO_SUBMIT -eq 0 ]; then
+    echo not submitted
+else
+    `echo $FULL_SUB_COMMAND`
+fi
 echo "# submitted via:" >> $NAME.sh
 echo "#    $FULL_SUB_COMMAND" >> $NAME.sh
 $CP_RESULT $CP_RESULT_OPT $NAME.sh $RESULTDIR > /dev/null
@@ -470,8 +479,10 @@ fi
 if [ $#FILES_FILE -eq 0 ]; then
     SKIP_EVTS=$[$SKIP_EVTS+$EVTS_PER_JOB]
 fi
+if [ $DO_SUBMIT -ne 0 ]; then
+    sleep 10
+fi
 ROUND=$[$ROUND+1]
-sleep 20
 done # while loop
 
 echo
