@@ -18,15 +18,20 @@ block MillePedeAlignmentAlgorithm = {
     untracked string monitorFile = "millePedeMonitor.root" # if empty: no monitoring...
 
     PSet pedeSteerer = {
-	# NOTE: All file names get the directory from 'MillePedeAlignmentAlgorithm.fileDir'. #FIXME
-	string steerFile = "pedeSteer" # gets automatically .txt ending (and .log for output log)
+	untracked string fileDir = "" # if empty: taken from 'MillePedeAlignmentAlgorithm.fileDir'
+	string steerFile = "pedeSteer" # beginning of steering file names
 	# If MillePedeAlignmentAlgorithm.mode causes pede to run (e.g. 'full', 'pede' etc.),
 	# the pede command line is constructed as:
-	#    'pedeCommand'n 'steerFile' 'MillePedeAlignmentAlgorithm.binaryFiles'
+	#    'pedeCommand' 'steerFile'Master.txt 
 	# (and - if pedeDump is not empty - extended by: > 'pedeDump')
 	# (MillePedeAlignmentAlgorithm.theDir is taken into account...)
-	untracked string pedeCommand = "/afs/cern.ch/user/f/flucke/cms/pede/vers20070124/pede"
+	untracked string pedeCommand = "/afs/cern.ch/user/f/flucke/cms/pede/vers20070410/pede"
 	untracked string pedeDump = "pede.dump"
+	string method = "inversion  6  0.8" # <method>  n(iter)  Delta(F)
+	vstring outlier = {"chisqcut  9.0  4.5"}#{, 
+#		               "outlierdownweighting 3",
+#		               "dwfractioncut 0.1"}
+	vstring options = {} #{ "bandwidth 6" }
 	
 	# Selection of parameters to fix
 	# ------------------------------
@@ -35,10 +40,18 @@ block MillePedeAlignmentAlgorithm = {
 	# There "TOBRodsSSLayers66,1cf000" means for the single sided rods of TOB layer 6:
 	# Use local x as free parameter, fix local y at true value and local z at 0 
         # and ignore the angles. 
+
+	# Parameters that would be automatically detected to be subcomponent of a hierarchy,
+	# but should be taken as standalone.
+	# Syntax as for AlignmentProducer.ParameterBuilder.Selector, all but '0' same meaning.
+	# (Limitation: Not guarantied to work if not _all_ parameters of an Alignable* are chosen!
+	PSet noHierarchyConstraint = { vstring alignParams = {} }
     }
     PSet pedeReader = {
         string readFile = "millepede.res"
-        untracked string fileDir = "" # directory of 'readFile', if empty: take from pedeSteerer
+	# directory of 'readFile', if empty:
+	# take from pedeSteerer (inheriting from MillePedeAlignmentAlgorithm)
+        untracked string fileDir = ""
     }
     int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
     bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivatives
