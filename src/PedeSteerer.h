@@ -8,8 +8,8 @@
  *
  * \author    : Gero Flucke
  * date       : October 2006
- * $Date: 2007/03/16 17:12:31 $
- * $Revision: 1.8 $
+ * $Date: 2007/05/11 16:14:43 $
+ * $Revision: 1.8.2.1 $
  * (last update by $Author: flucke $)
  */
 
@@ -61,7 +61,7 @@ class PedeSteerer
   bool runPede(const std::string &masterSteer) const;
   double cmsToPedeFactor(unsigned int parNum) const;
   /// results from pede (and start values for pede) might need a sign flip
-  double parameterSign() const;
+  int parameterSign() const { return myParameterSign; }
   /// directory from constructor input, '/' is attached if needed
   const std::string& directory() const { return myDirectory;}
 
@@ -91,6 +91,7 @@ class PedeSteerer
   const AlignmentParameterStore *myParameterStore;
   edm::ParameterSet myConfig;
   std::string myDirectory; /// directory of all files
+  int myParameterSign; /// old pede versions (before May '07) need a sign flip...
 
   std::vector<std::string> mySteeringFiles; /// keeps track of created 'secondary' steering files
   AlignableToIdMap  myAlignableToIdMap; /// providing unique ID for alignable, space for param IDs

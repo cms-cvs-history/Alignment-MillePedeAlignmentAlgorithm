@@ -25,13 +25,17 @@ block MillePedeAlignmentAlgorithm = {
 	#    'pedeCommand' 'steerFile'Master.txt 
 	# (and - if pedeDump is not empty - extended by: > 'pedeDump')
 	# (MillePedeAlignmentAlgorithm.theDir is taken into account...)
-	untracked string pedeCommand = "/afs/cern.ch/user/f/flucke/cms/pede/vers20070410/pede"
+#	untracked string pedeCommand = "/afs/cern.ch/user/f/flucke/cms/pede/vers20070410/pede"
+	untracked string pedeCommand = "/afs/cern.ch/user/f/flucke/cms/pede/vers20070509/pede"
+
+	untracked int32 parameterSign = 1 # old pede versions (before May '07) need a sign flip
 	untracked string pedeDump = "pede.dump"
 	string method = "inversion  6  0.8" # <method>  n(iter)  Delta(F)
 	vstring outlier = {"chisqcut  9.0  4.5"}#{, 
 #		               "outlierdownweighting 3",
 #		               "dwfractioncut 0.1"}
 	vstring options = {} #{ "bandwidth 6" }
+
 	
 	# Selection of parameters to fix
 	# ------------------------------

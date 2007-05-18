@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.11 $
- *  $Date: 2007/03/16 18:01:22 $
+ *  $Revision: 1.11.2.1 $
+ *  $Date: 2007/05/11 16:14:43 $
  *  (last update by $Author: flucke $)
  */
 
@@ -44,8 +44,15 @@ PedeSteerer::PedeSteerer(AlignableTracker *aliTracker, AlignableMuon *aliMuon,
 			 AlignmentParameterStore *store,
 			 const edm::ParameterSet &config, const std::string &defaultDir) :
   myParameterStore(store), myConfig(config),
+  myParameterSign(myConfig.getUntrackedParameter<int>("parameterSign")),
   myDirectory(myConfig.getUntrackedParameter<std::string>("fileDir"))
 {
+
+  if (myParameterSign != 1 && myParameterSign != -1) {
+    cms::Exception("BadConfig") << "Expect PedeSteerer.parameterSign = +/-1, "
+				<< "found " << myParameterSign << ".";
+  }
+
   // Correct directory before building maps:
   if (myDirectory.empty()) myDirectory = defaultDir;
   if (!myDirectory.empty() && myDirectory.find_last_of('/') != myDirectory.size() - 1) {
@@ -210,11 +217,11 @@ double PedeSteerer::cmsToPedeFactor(unsigned int parNum) const
   }
 }
 
-//_________________________________________________________________________
-double PedeSteerer::parameterSign() const
-{
-  return -1.;
-}
+// //_________________________________________________________________________
+// double PedeSteerer::parameterSign() const
+// {
+//   return -1.;
+// }
 
 //_________________________________________________________________________
 unsigned int PedeSteerer::buildMap(Alignable *highestLevelAli1, Alignable *highestLevelAli2)
