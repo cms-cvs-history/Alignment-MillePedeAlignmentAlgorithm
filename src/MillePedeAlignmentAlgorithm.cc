@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.16.2.1 $
- *  $Date: 2007/04/30 14:22:42 $
+ *  $Revision: 1.16.2.2 $
+ *  $Date: 2007/05/11 16:17:38 $
  *  (last update by $Author: flucke $)
  */
 
@@ -239,62 +239,40 @@ int MillePedeAlignmentAlgorithm::addGlobalDerivatives
  const TrajectoryStateOnSurface &trackTsos, AlignmentParameters *&params)
 {
   params = 0;
+  theFloatBufferX.clear();
+  theFloatBufferY.clear();
+  theIntBuffer.clear();
+
   const TrajectoryStateOnSurface &tsos = 
     (theUseTrackTsos ? trackTsos : refTrajPtr->trajectoryStates()[iHit]);
-  int flagXY =
-    this->globalDerivatives(refTrajPtr->recHits()[iHit], tsos,
-			    kLocalX, theFloatBuffer, theIntBuffer, params);
-  if (flagXY == 1) {
-    this->callMille(refTrajPtr, iHit, kLocalX, theFloatBuffer, theIntBuffer);
-
-    if (this->is2D((refTrajPtr->recHits()[iHit]))) {
-      const int flagY =
-	this->globalDerivatives(refTrajPtr->recHits()[iHit], tsos,
-				kLocalY, theFloatBuffer, theIntBuffer, params);
-      if (flagY != flagXY) {
-	edm::LogWarning("Alignment") << "@SUB=MillePedeAlignmentAlgorithm::addGlobalDerivatives"
-				     << "flagX = " << flagXY << ", flagY = " << flagY
-				     << " => ignore track";
-	flagXY = -1;
-      } else {
-	this->callMille(refTrajPtr, iHit, kLocalY, theFloatBuffer, theIntBuffer);
-        flagXY = 2;
-      }
-    }
-  }
-
-  return flagXY;
-}
-
-//____________________________________________________
-int MillePedeAlignmentAlgorithm::globalDerivatives(const ConstRecHitPointer &recHitPtr,
-						   const TrajectoryStateOnSurface &tsos,
-						   MeasurementDirection xOrY,
-						   std::vector<float> &globalDerivatives,
-						   std::vector<int> &globalLabels,
-                                                   AlignmentParameters *&params) const
-{
-  params = 0;
-  globalDerivatives.clear();
-  globalLabels.clear();
-
-  // get AlignableDet for this hit
+  const ConstRecHitPointer &recHitPtr = refTrajPtr->recHits()[iHit];
+  // get AlignableDet/Unit for this hit
   AlignableDetOrUnitPtr alidet(theAlignableNavigator->alignableFromGeomDet(recHitPtr->det()));
+  const bool is2DHit = this->is2D(recHitPtr);
 
-  if (this->globalDerivativesHierarchy(tsos, alidet, alidet, xOrY, // 2x alidet, sic!
-                                       globalDerivatives, globalLabels, params)) {
-    return (globalDerivatives.empty() ? 0 : 1); // empty: no alignable for hit
+  if (!this->globalDerivativesHierarchy(tsos, alidet, alidet, is2DHit,// 2x alidet, sic!
+					theFloatBufferX, theFloatBufferY, theIntBuffer,
+					params)) {
+    return -1; // problem
+  } else if (theFloatBufferX.empty()) {
+    return 0; // empty for X: no alignable for hit
   } else {
-    return -1;
+    this->callMille(refTrajPtr, iHit, kLocalX, theFloatBufferX, theIntBuffer);
+    if (is2DHit) {
+      this->callMille(refTrajPtr, iHit, kLocalY, theFloatBufferY, theIntBuffer);
+      return 2; // 2D information used
+    } else { 
+      return 1; // 1D information used
+    }
   }
 }
 
 //____________________________________________________
 bool MillePedeAlignmentAlgorithm
 ::globalDerivativesHierarchy(const TrajectoryStateOnSurface &tsos,
-                             Alignable *ali, const AlignableDetOrUnitPtr &alidet,
-                             MeasurementDirection xOrY,
-                             std::vector<float> &globalDerivatives,
+                             Alignable *ali, const AlignableDetOrUnitPtr &alidet, bool is2DHit,
+                             std::vector<float> &globalDerivativesX,
+                             std::vector<float> &globalDerivativesY,
                              std::vector<int> &globalLabels,
                              AlignmentParameters *&lowestParams) const
 {
@@ -319,8 +297,13 @@ bool MillePedeAlignmentAlgorithm
     // cols: 2, i.e. x&y, rows: parameters, usually RigidBodyAlignmentParameters::N_PARAM
     for (unsigned int iSel = 0; iSel < selPars.size(); ++iSel) {
       if (selPars[iSel]) {
-        globalDerivatives.push_back(derivs[iSel][xOrY]/thePedeSteer->cmsToPedeFactor(iSel));
+        globalDerivativesX.push_back(derivs[iSel][kLocalX]
+				     /thePedeSteer->cmsToPedeFactor(iSel));
         globalLabels.push_back(thePedeSteer->parameterLabel(alignableLabel, iSel));
+        if (is2DHit) {
+	  globalDerivativesY.push_back(derivs[iSel][kLocalY]
+				       /thePedeSteer->cmsToPedeFactor(iSel));
+	}
       }
     }
     // Exclude mothers if selected to be no part of a hierarchy:
@@ -329,9 +312,10 @@ bool MillePedeAlignmentAlgorithm
       return true;
     }
   }
-
-  return this->globalDerivativesHierarchy(tsos, ali->mother(), alidet, xOrY,
-                                          globalDerivatives, globalLabels, lowestParams);
+  // Call recursively for mother, will stop if mother == 0:
+  return this->globalDerivativesHierarchy(tsos, ali->mother(), alidet, is2DHit,
+                                          globalDerivativesX, globalDerivativesY,
+					  globalLabels, lowestParams);
 }
 
 //____________________________________________________
@@ -359,8 +343,11 @@ void MillePedeAlignmentAlgorithm::callMille
 		  globalDerivatives.size(), &(globalDerivatives[0]), &(globalLabels[0]),
 		  residuum, sigma);
   if (theMonitor) {
-    theMonitor->fillMille(refTrajPtr->recHits()[iTrajHit], localDerivs, globalDerivatives,
-                          residuum, sigma);
+    theMonitor->fillDerivatives(refTrajPtr->recHits()[iTrajHit],localDerivs, globalDerivatives,
+				(xOrY == kLocalY));
+    theMonitor->fillResiduals(refTrajPtr->recHits()[iTrajHit],
+			      refTrajPtr->trajectoryStates()[iTrajHit],
+			      iTrajHit, residuum, sigma, (xOrY == kLocalY));
   }
 }
 
