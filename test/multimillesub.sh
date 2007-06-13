@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.6.2.2 $ from $Date: 2007/05/08 09:51:56 $ by $Author: flucke $
+# $Revision: 1.6.2.3 $ from $Date: 2007/05/11 16:27:17 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -48,7 +48,7 @@ BSUB_OPT_R=cmsalca #"\"type==SLC3&&swp>500&&pool>1000\""
 #QUEUE=1nh
 #BSUB_OPT_R="type==SLC3&&swp>450&&pool>750"
 
-CMSSW_VERS=CMSSW_1_3_1
+CMSSW_VERS=CMSSW_1_3_3
 BASE_DIR=${HOME}/scratch0/${CMSSW_VERS}
 
 OUT_DIR=$JOB_NAME # directory 
@@ -71,10 +71,9 @@ INPUTTAG=ctfWithMaterialTracks #AlCaRecoCSA06ZMuMu
 ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
 ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers12,111001\"" # 4 params for double sided barrel
 ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers35,101001\"" # 3 params for single sided barrel
-ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,c0c00c\"" # (except of fixed last layer)
+ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,C0C00C\"" # (except of fixed last layer, not in hierar.)
 ALIGN_SEL=${ALIGN_SEL}", \"TIBHalfBarrels,111001\""
 ALIGN_SEL=${ALIGN_SEL}", \"TOBHalfBarrels,111001\""
-NOT_CONSTRAIN_SEL=\"TOBRodsLayers66,111111\"
 
 ## NOTE 2006/11 A
 #ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""  # fix pixel
@@ -283,9 +282,6 @@ process Alignment = {
     replace MillePedeAlignmentAlgorithm.pedeSteerer.method = "inversion  9  0.8"
     replace MillePedeAlignmentAlgorithm.pedeSteerer.outlier = {
 	 "chisqcut  9.0  4.5" }  #{ "outlierdownweighting 3", "dwfractioncut 0.1" }
-    replace MillePedeAlignmentAlgorithm.pedeSteerer.noHierarchyConstraint = {
-	    vstring alignParams = { $NOT_CONSTRAIN_SEL }
-	}
 
 # refitting for normal tracks...
     include "RecoTracker/TrackProducer/data/RefitterWithMaterial.cff"
