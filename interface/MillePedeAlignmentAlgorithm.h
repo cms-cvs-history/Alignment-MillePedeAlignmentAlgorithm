@@ -7,8 +7,8 @@
 ///
 ///  \author    : Gero Flucke
 ///  date       : October 2006
-///  $Revision: 1.9.2.1 $
-///  $Date: 2007/04/30 14:19:53 $
+///  $Revision: 1.9.2.2 $
+///  $Date: 2007/05/18 13:14:57 $
 ///  (last update by $Author: flucke $)
 
 
@@ -97,7 +97,7 @@ class MillePedeAlignmentAlgorithm : public AlignmentAlgorithmBase
 			const std::vector<std::string> &inFiles) const;
   bool addHits(const std::vector<Alignable*> &alis,
 	       const std::vector<AlignmentUserVariables*> &mpVars) const;
-  void orderedTsos(const Trajectory *traj, 
+  bool orderedTsos(const Trajectory *traj, 
 		   std::vector<TrajectoryStateOnSurface> &trackTsos) const;
   edm::ParameterSet         theConfig;
   unsigned int              theMode;

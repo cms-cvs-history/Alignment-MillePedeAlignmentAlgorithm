@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.16.2.2 $
- *  $Date: 2007/05/11 16:17:38 $
+ *  $Revision: 1.16.2.3 $
+ *  $Date: 2007/05/18 13:16:24 $
  *  (last update by $Author: flucke $)
  */
 
@@ -106,6 +106,7 @@ void MillePedeAlignmentAlgorithm::initialize(const edm::EventSetup &setup,
     const std::string moniFile(theConfig.getUntrackedParameter<std::string>("monitorFile"));
     if (moniFile.size()) theMonitor = new MillePedeMonitor((theDir + moniFile).c_str());
   }
+  // FIXME: for PlotMillePede hit statistics stuff we also might want doIO(0)... ?
   if (this->isMode(myPedeSteerBit) // for pedeRun and pedeRead we might want to merge
       || !theConfig.getParameter<std::vector<std::string> >("mergeTreeFiles").empty()) {
     this->doIO(0);
@@ -175,8 +176,8 @@ void MillePedeAlignmentAlgorithm::run(const edm::EventSetup &setup,
   for (ConstTrajTrackPairCollection::const_iterator it = tracks.begin(); it != tracks.end(); ++it) {
     const Trajectory *traj = (*it).first;
     const reco::Track *track = (*it).second;
+    if (!this->orderedTsos(traj, trackTsos)) continue;
     if (theMonitor) theMonitor->fillTrack(track, traj);
-    this->orderedTsos(traj, trackTsos);
 
     ReferenceTrajectoryBase::ReferenceTrajectoryPtr refTrajPtr = 
       this->referenceTrajectory(trackTsos.front(), traj, magField);
@@ -189,14 +190,14 @@ void MillePedeAlignmentAlgorithm::run(const edm::EventSetup &setup,
     for (unsigned int iHit = 0; iHit < refTrajPtr->recHits().size(); ++iHit) {
       const int flagXY = this->addGlobalDerivatives(refTrajPtr, iHit, trackTsos[iHit],parVec[iHit]);
       if (flagXY < 0) { // problem
-	nValidHitsX = -1;
-	break;
+        nValidHitsX = -1;
+        break;
       } else { // hit is fine, increase x/y statistics
         if (flagXY >= 1) ++nValidHitsX;
         validHitVecY[iHit] = (flagXY >= 2);
       } 
     } // end loop on hits
-
+    
     if (nValidHitsX >= theMinNumHits) { // enough 'good' alignables hit: increase the hit statistics
       // FIXME: Add also hit statistics for higher levels in hierarchy? But take care about
       //        exclusion as for hierarchy constraints...
@@ -210,6 +211,7 @@ void MillePedeAlignmentAlgorithm::run(const edm::EventSetup &setup,
     } else {
       theMille->kill();
     }
+
   } // end of track loop
 }
 
@@ -306,11 +308,8 @@ bool MillePedeAlignmentAlgorithm
 	}
       }
     }
-    // Exclude mothers if selected to be no part of a hierarchy:
-    // FIXME: Currently full object independent of selection, cf. PedeSteerer::hierarchyConstraint
-    if (!thePedeSteer->noHieraParamSel(ali).empty()) {
-      return true;
-    }
+    // Exclude mothers if Alignable selected to be no part of a hierarchy:
+    if (thePedeSteer->isNoHiera(ali)) return true;
   }
   // Call recursively for mother, will stop if mother == 0:
   return this->globalDerivativesHierarchy(tsos, ali->mother(), alidet, is2DHit,
@@ -595,7 +594,7 @@ bool MillePedeAlignmentAlgorithm::addHits(const std::vector<Alignable*> &alis,
 
 
 //__________________________________________________________________________________________________
-void MillePedeAlignmentAlgorithm::orderedTsos(const Trajectory *traj, 
+bool MillePedeAlignmentAlgorithm::orderedTsos(const Trajectory *traj, 
                                               std::vector<TrajectoryStateOnSurface> &trackTsos)const
 {
   trackTsos.clear();
@@ -616,5 +615,18 @@ void MillePedeAlignmentAlgorithm::orderedTsos(const Trajectory *traj,
   } else {
     edm::LogError("Alignment") << "$SUB=MillePedeAlignmentAlgorithm::orderedTsos"
                                << "Trajectory neither along nor opposite to momentum.";
+    return false;
   }
+
+  for (std::vector<TrajectoryStateOnSurface>::const_iterator iTraj = trackTsos.begin(),
+	 iEnd = trackTsos.end(); iTraj != iEnd; ++iTraj) {
+    if (!(*iTraj).isValid()) {
+      edm::LogError("Alignment") << "@SUB=MillePedeAlignmentAlgorithm::orderedTsos"
+				 << "an invalid  TSOS...?";
+      return false;
+    }
+  }
+  
+
+  return true;
 }
