@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.11.2.2 $
- *  $Date: 2007/05/18 13:06:03 $
+ *  $Revision: 1.11.2.3 $
+ *  $Date: 2007/06/13 09:05:21 $
  *  (last update by $Author: flucke $)
  */
 
@@ -14,6 +14,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 #include "Alignment/CommonAlignment/interface/Alignable.h"
+#include "Alignment/CommonAlignment/interface/Utilities.h"
 #include "Alignment/CommonAlignmentAlgorithm/interface/AlignmentParameterStore.h"
 #include "Alignment/CommonAlignmentAlgorithm/interface/AlignmentParameterSelector.h"
 #include "Alignment/CommonAlignmentAlgorithm/interface/SelectionUserVariables.h"
@@ -33,6 +34,7 @@
 
 // from ROOT
 #include <TSystem.h>
+#include <TMath.h>
 
 // NOTE: The '+4', is backward incompatible for results with older binary files...
 const unsigned int PedeSteerer::theMaxNumParam = RigidBodyAlignmentParameters::N_PARAM + 4;
@@ -45,7 +47,8 @@ PedeSteerer::PedeSteerer(AlignableTracker *aliTracker, AlignableMuon *aliMuon,
 			 const edm::ParameterSet &config, const std::string &defaultDir) :
   myParameterStore(store), myConfig(config),
   myDirectory(myConfig.getUntrackedParameter<std::string>("fileDir")),
-  myParameterSign(myConfig.getUntrackedParameter<int>("parameterSign"))
+  myParameterSign(myConfig.getUntrackedParameter<int>("parameterSign")),
+  theCoordMaster(0)
 {
   if (myParameterSign != 1 && myParameterSign != -1) {
     cms::Exception("BadConfig") << "Expect PedeSteerer.parameterSign = +/-1, "
@@ -61,7 +64,23 @@ PedeSteerer::PedeSteerer(AlignableTracker *aliTracker, AlignableMuon *aliMuon,
   this->buildMap(aliTracker, aliMuon); //has to be done first
   const std::vector<Alignable*> &alis = myParameterStore->alignables();
 
-  // Fixing parameters also checks for invalid parameter choices:
+  // Coordinate system selection and correction before fixing, at least for fixing at truth:
+  theCoordDefiners = this->selectCoordinateAlis(alis);
+  if (!theCoordDefiners.empty()) { // Create steering with constraints to define coordinate system:
+    const std::string nameCoordFile(this->fileName("Coord"));
+    theCoordMaster = aliTracker; // Both tracker and muon have global coordinates, though...
+    if (!theCoordMaster) theCoordMaster = aliMuon; // ...which coordinates should not really matter anyway.
+    // FIXME: With both tracker and muon, only tracker will be shifted in correctToReferenceSystem!
+    // Could be fixed by introducing AlignableComposite with both, but must prevent double deletion.
+    // If this has 'global frame', correctToReferenceSystem can use globalParameters (as it does)
+    this->defineCoordinates(theCoordDefiners, theCoordMaster, nameCoordFile);
+    edm::LogInfo("Alignment") << "@SUB=PedeSteerer" 
+                              << theCoordDefiners.size() << " highest level objects define the "
+			      << "coordinate system, steering file " << nameCoordFile << ".";
+    this->correctToReferenceSystem();
+  } 
+
+  // Fixing parameters also checks for invalid parameter choices (should that be done first?):
   const std::string nameFixFile(this->fileName("FixPara"));
   const std::pair<unsigned int, unsigned int> nFixFixCor(this->fixParameters(alis, nameFixFile));
   if (nFixFixCor.first != 0 || nFixFixCor.second != 0) {
@@ -69,17 +88,6 @@ PedeSteerer::PedeSteerer(AlignableTracker *aliTracker, AlignableMuon *aliMuon,
                               << nFixFixCor.first << " parameters fixed at 0. and "
                               << nFixFixCor.second << " at 'original' position, "
                               << "steering file " << nameFixFile << ".";
-  } 
-
-  const std::vector<Alignable*> coordAlis(this->selectCoordinateAlis(alis));
-  if (!coordAlis.empty()) { // Create steering with constraints to define coordinate system:
-    const std::string nameCoordFile(this->fileName("Coord"));
-    Alignable *aliMaster = aliTracker; // Both tracker and muon have global coordinates, though...
-    if (!aliTracker) aliMaster = aliMuon; // ...which coordinates should not really matter anyway.
-    this->defineCoordinates(coordAlis, aliMaster, nameCoordFile);
-    edm::LogInfo("Alignment") << "@SUB=PedeSteerer" 
-                              << coordAlis.size() << " highest level objects define the "
-			      << "coordinate system, steering file " << nameCoordFile << ".";
   } 
 
   if (this->buildNoHierarchyCollection(alis)) { // before hierarchyConstraints(..)
@@ -445,6 +453,57 @@ void PedeSteerer::defineCoordinates(const std::vector<Alignable*> &alis, Alignab
 }
 
 //_________________________________________________________________________
+void PedeSteerer::correctToReferenceSystem()
+{
+  typedef RigidBodyAlignmentParameters RbPars;
+  if (!theCoordMaster || theCoordDefiners.empty()) return; // nothing was defined
+
+  std::vector<Alignable*> definerDets; // or ...DetUnits
+  for (std::vector<Alignable*>::iterator it = theCoordDefiners.begin(), iE = theCoordDefiners.end();
+       it != iE; ++it) {// find lowest level objects of alignables that define the coordinate system
+    (*it)->deepComponents(definerDets);
+  }
+
+  for (unsigned int iLoop = 0; ; ++iLoop) { // iterate: shifts and rotations are not independent
+    AlgebraicVector meanPars(RbPars::N_PARAM);
+    for (std::vector<Alignable*>::iterator it = definerDets.begin(), iE = definerDets.end();
+	 it != iE; ++it) { // sum up mean displacements/misrotations:
+      meanPars += RbPars(*it, true).globalParameters();// requires theCoordMaster has global frame
+    }
+    meanPars /= definerDets.size();
+
+    align::Scalar squareSum = 0.;
+    for (unsigned int i = 0; i < RbPars::N_PARAM; ++i) {
+      squareSum += meanPars[i] * meanPars[i] * this->cmsToPedeFactor(i) * this->cmsToPedeFactor(i);
+    }
+
+    if (true || iLoop == 0) {
+      edm::LogInfo("Alignment") << "@SUB=PedeSteerer::correctToReferenceSystem"
+				<< "Loop " << iLoop << " "
+				<< "Mean misalignment of dets of defined coordinate system "
+				<< "(will be iteratively corrected to about 0.):" << meanPars;
+    }
+    if (iLoop >=5 || squareSum < 1.e-20) { // sqrt(1.e-20)=1.e-10: close enough to stop iterating
+      if (iLoop >=5) {
+	edm::LogError("Alignment") << "@SUB=PedeSteerer::correctToReferenceSystem"
+				   << "No convergence in " << iLoop << " iterations, " 
+				   << "remaining misalignment: " << meanPars;
+      }
+      break;
+    }
+
+    const GlobalVector globalShift(meanPars[RbPars::dx],meanPars[RbPars::dy],meanPars[RbPars::dz]);
+    align::EulerAngles globalAngles(3);
+    globalAngles[0] = meanPars[RbPars::dalpha];
+    globalAngles[1] = meanPars[RbPars::dbeta];
+    globalAngles[2] = meanPars[RbPars::dgamma];
+    theCoordMaster->move(-globalShift); // sign to revert
+    theCoordMaster->rotateInGlobalFrame(align::toMatrix(-globalAngles)); // sign to revert
+  }
+  
+}
+
+//_________________________________________________________________________
 unsigned int PedeSteerer::hierarchyConstraints(const std::vector<Alignable*> &alis,
 					       const std::string &fileName)
 {
@@ -587,16 +646,9 @@ std::string PedeSteerer::buildMasterSteer(const std::vector<std::string> &binary
   // add method
   mainSteerRef << "\nmethod  " << myConfig.getParameter<std::string>("method") << "\n";
 
-  // add outlier treatment
-  const std::vector<std::string> outTr(myConfig.getParameter<std::vector<std::string> >("outlier"));
-  mainSteerRef << "\n* Outlier treatment\n";
-  for (unsigned int i = 0; i < outTr.size(); ++i) {
-    mainSteerRef << outTr[i] << "\n";
-  }
-
   // add further options
   const std::vector<std::string> opt(myConfig.getParameter<std::vector<std::string> >("options"));
-  mainSteerRef << "\n* Further options \n";
+  mainSteerRef << "\n* Outlier treatment and other options \n";
   for (unsigned int i = 0; i < opt.size(); ++i) {
     mainSteerRef << opt[i] << "\n";
   }

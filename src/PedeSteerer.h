@@ -8,8 +8,8 @@
  *
  * \author    : Gero Flucke
  * date       : October 2006
- * $Date: 2007/05/18 13:06:03 $
- * $Revision: 1.8.2.2 $
+ * $Date: 2007/06/13 09:05:21 $
+ * $Revision: 1.8.2.3 $
  * (last update by $Author: flucke $)
  */
 
@@ -58,6 +58,10 @@ class PedeSteerer
   std::string buildMasterSteer(const std::vector<std::string> &binaryFiles);
   /// run pede, masterSteer should be as returned from buildMasterSteer(...)
   bool runPede(const std::string &masterSteer) const;
+  /// If reference alignables have been configured, shift everything such that mean
+  /// position and orientation of dets in these alignables are zero.
+  void correctToReferenceSystem();
+
   double cmsToPedeFactor(unsigned int parNum) const;
   /// results from pede (and start values for pede) might need a sign flip
   int parameterSign() const { return myParameterSign; }
@@ -103,6 +107,7 @@ class PedeSteerer
   /// create and open file with name, if (addToList) append to mySteeringFiles
   std::ofstream* createSteerFile(const std::string &name, bool addToList);
 
+  // data members
   const AlignmentParameterStore *myParameterStore;
   edm::ParameterSet myConfig;
   std::string myDirectory; /// directory of all files
@@ -113,6 +118,9 @@ class PedeSteerer
   IdToAlignableMap  myIdToAlignableMap; /// reverse map
 
   std::set<const Alignable*> myNoHieraCollection; /// Alignables deselected for hierarchy constr.
+  Alignable *theCoordMaster;                      /// master coordinates, must (?) be global frame
+  std::vector<Alignable*> theCoordDefiners;      /// Alignables selected to define coordinates
+  
   static const unsigned int theMaxNumParam;
   static const unsigned int theMinLabel;
 };
