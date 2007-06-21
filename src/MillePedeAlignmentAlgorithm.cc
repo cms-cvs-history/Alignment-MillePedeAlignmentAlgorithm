@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.16.2.3 $
- *  $Date: 2007/05/18 13:16:24 $
+ *  $Revision: 1.16.2.4 $
+ *  $Date: 2007/06/13 09:00:45 $
  *  (last update by $Author: flucke $)
  */
 
@@ -32,8 +32,6 @@
 
 #include "Alignment/CommonAlignment/interface/AlignableNavigator.h"
 #include "Alignment/CommonAlignment/interface/AlignableDetOrUnitPtr.h"
-
-#include "Alignment/TrackerAlignment/interface/AlignableTracker.h"
 
 #include "DataFormats/CLHEP/interface/AlgebraicObjects.h"
 
@@ -106,6 +104,7 @@ void MillePedeAlignmentAlgorithm::initialize(const edm::EventSetup &setup,
     const std::string moniFile(theConfig.getUntrackedParameter<std::string>("monitorFile"));
     if (moniFile.size()) theMonitor = new MillePedeMonitor((theDir + moniFile).c_str());
   }
+
   // FIXME: for PlotMillePede hit statistics stuff we also might want doIO(0)... ?
   if (this->isMode(myPedeSteerBit) // for pedeRun and pedeRead we might want to merge
       || !theConfig.getParameter<std::vector<std::string> >("mergeTreeFiles").empty()) {
@@ -138,13 +137,13 @@ void MillePedeAlignmentAlgorithm::terminate()
   }
   
   if (this->isMode(myPedeReadBit)) {
-    if (pedeOk && this->readFromPede()) {
-      // FIXME: problem if what is read in does not correspond to store
-      theAlignmentParameterStore->applyParameters();
-    } else {
+    if (!pedeOk || !this->readFromPede()) {
       edm::LogError("Alignment") << "@SUB=MillePedeAlignmentAlgorithm::terminate"
-                                 << "Problems running pede or reading result.";
+                                 << "Problems running pede or reading result, but applying!";
     }
+    // FIXME: problem if what is read in does not correspond to store
+    theAlignmentParameterStore->applyParameters();
+    // thePedeSteer->correctToReferenceSystem(); // Already done before, here for possible rounding reasons...??
   }
 
   if (this->isMode(myMilleBit)) { // if mille was run, we store trees with suffix _1...
