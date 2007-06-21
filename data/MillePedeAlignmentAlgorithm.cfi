@@ -25,27 +25,20 @@ block MillePedeAlignmentAlgorithm = {
 	#    'pedeCommand' 'steerFile'Master.txt 
 	# (and - if pedeDump is not empty - extended by: > 'pedeDump')
 	# (MillePedeAlignmentAlgorithm.theDir is taken into account...)
-	untracked string pedeCommand = "/afs/cern.ch/user/f/flucke/cms/pede/vers20070410/pede"
+	untracked string pedeCommand = "/afs/cern.ch/user/f/flucke/cms/pede/versWebEndMay2007/pede"
+
+	untracked int32 parameterSign = 1 # old pede versions (before May '07) need a sign flip
 	untracked string pedeDump = "pede.dump"
 	string method = "inversion  6  0.8" # <method>  n(iter)  Delta(F)
-	vstring outlier = {"chisqcut  9.0  4.5"}#{, 
+	vstring options = {"chisqcut  20.0  4.5"}#{, 
 #		               "outlierdownweighting 3",
-#		               "dwfractioncut 0.1"}
-	vstring options = {} #{ "bandwidth 6" }
-	
-	# Selection of parameters to fix
-	# ------------------------------
-	# Which AlignmentParameters to fix is now determined from what is given as
-	# AlignmentProducer.ParameterBuilder.Selector: 
-	# There "TOBRodsSSLayers66,1cf000" means for the single sided rods of TOB layer 6:
-	# Use local x as free parameter, fix local y at true value and local z at 0 
-        # and ignore the angles. 
+#		               "dwfractioncut 0.1",
+#                                   "bandwidth 6" }
 
-	# Parameters that would be automatically detected to be subcomponent of a hierarchy,
-	# but should be taken as standalone.
-	# Syntax as for AlignmentProducer.ParameterBuilder.Selector, all but '0' same meaning.
-	# (Limitation: Not guarantied to work if not _all_ parameters of an Alignable* are chosen!
-	PSet noHierarchyConstraint = { vstring alignParams = {} }
+	# Special selection of parameters to fix, use as reference coordinate system etc.
+	# ------------------------------------------------------------------------------
+	# All this is determined from what is given as 
+	# AlignmentProducer.ParameterBuilder.Selector, cf. Twiki page SWGuideMillepedeIIAlgorithm.
     }
     PSet pedeReader = {
         string readFile = "millepede.res"
