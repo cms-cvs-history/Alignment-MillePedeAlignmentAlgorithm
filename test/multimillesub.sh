@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.6.2.3 $ from $Date: 2007/05/11 16:27:17 $ by $Author: flucke $
+# $Revision: 1.6.2.4 $ from $Date: 2007/06/13 09:14:17 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -249,7 +249,14 @@ process Alignment = {
     replace AlignmentProducer.doMisalignmentScenario = $DO_MISALIGN
     replace MisalignmentScenarioSettings.setError = false #replace in block defined Scenarios.cff
     replace AlignmentProducer.MisalignmentScenario.TPBs.scale = 0.
-#    replace AlignmentProducer.MisalignmentScenario.TPBs.Dets = { double scale = 0.}
+#    replace AlignmentProducer.MisalignmentScenario.TPBs = {
+#	string distribution = "flat"
+#	PSet PixelHalfBarrelLayers = {
+#	    double dXlocal = 0.03 double dYlocal = -0.05 double dZlocal = 0.1 
+#	    double phiXlocal = 0.0001 double phiYlocal = 0.00008 double phiZlocal = 0.00004
+#	    }
+#    }
+##    replace AlignmentProducer.MisalignmentScenario.TPBs.Dets = { double scale = 0.}
     replace AlignmentProducer.MisalignmentScenario.TPEs.scale = 0.
     replace AlignmentProducer.MisalignmentScenario.TECs.scale = 0.
     replace AlignmentProducer.MisalignmentScenario.TIDs.scale = 0.
@@ -280,8 +287,8 @@ process Alignment = {
     replace MillePedeAlignmentAlgorithm.pedeSteerer.steerFile = "pedeSteerSUFFIX"
     replace MillePedeAlignmentAlgorithm.pedeSteerer.pedeDump = "pedeSUFFIX.dump"
     replace MillePedeAlignmentAlgorithm.pedeSteerer.method = "inversion  9  0.8"
-    replace MillePedeAlignmentAlgorithm.pedeSteerer.outlier = {
-	 "chisqcut  9.0  4.5" }  #{ "outlierdownweighting 3", "dwfractioncut 0.1" }
+    replace MillePedeAlignmentAlgorithm.pedeSteerer.options = {
+	 "chisqcut  20.0  4.5" }  #{ "outlierdownweighting 3", "dwfractioncut 0.1" }
 
 # refitting for normal tracks...
     include "RecoTracker/TrackProducer/data/RefitterWithMaterial.cff"
