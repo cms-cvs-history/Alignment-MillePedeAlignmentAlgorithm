@@ -35,11 +35,14 @@ block MillePedeAlignmentAlgorithm = {
 #		               "dwfractioncut 0.1",
 #                                   "bandwidth 6" }
 
+	
 	# Special selection of parameters to fix, use as reference coordinate system etc.
 	# ------------------------------------------------------------------------------
 	# All this is determined from what is given as 
 	# AlignmentProducer.ParameterBuilder.Selector, cf. Twiki page SWGuideMillepedeIIAlgorithm.
+	VPSet Presigmas = {} 
     }
+
     PSet pedeReader = {
         string readFile = "millepede.res"
 	# directory of 'readFile', if empty:

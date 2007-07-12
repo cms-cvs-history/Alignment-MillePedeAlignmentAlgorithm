@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.6.2.5 $ from $Date: 2007/06/21 12:57:13 $ by $Author: flucke $
+# $Revision: 1.6.2.6 $ from $Date: 2007/07/12 16:03:28 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -48,7 +48,7 @@ BSUB_OPT_R=cmsalca #"\"type==SLC3&&swp>500&&pool>1000\""
 #QUEUE=1nh
 #BSUB_OPT_R="type==SLC3&&swp>450&&pool>750"
 
-CMSSW_VERS=CMSSW_1_5_0
+CMSSW_VERS=CMSSW_1_5_1
 BASE_DIR=${HOME}/scratch0/${CMSSW_VERS}
 
 OUT_DIR=$JOB_NAME # directory 
@@ -61,6 +61,15 @@ CP_RESULT_OPT="-r"
 SUBMIT_DIR=${HOME}/scratch0/submit/${OUT_DIR}
 
 INPUTTAG=ctfWithMaterialTracks #AlCaRecoCSA06ZMuMu
+
+ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
+ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsDS,111001,geomSel\"" # 4 params for double sided barrel
+ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,1f1001,geomSel\""   # fix global z/local y for...
+ALIGN_SEL=${ALIGN_SEL}", \"TOBDetsLayers11,111001,geomSel\"" # 4 params for double sided barrel
+ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers22,111001,geomSel\"" # 4 params for double sided barrel
+ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001,geomSel\"" #  ...single sided TIB and TOB
+ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
+
 ## CSA06
 #ALIGN_SEL="\"TOBDSRods,111111\",\"TOBSSRodsLayers15,1ff111\""
 #ALIGN_SEL=${ALIGN_SEL}", \"TIBDSDets,111111\", \"TIBSSDets,1ff111\""
@@ -68,12 +77,14 @@ INPUTTAG=ctfWithMaterialTracks #AlCaRecoCSA06ZMuMu
 #ALIGN_SEL=${ALIGN_SEL}", \"PixelHalfBarrelLayers,ffffff\""
 
 ## NOTE 2006/11 A with hierarchy
-ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
-ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers12,111001\"" # 4 params for double sided barrel
-ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers35,101001\"" # 3 params for single sided barrel
-ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,C0C00C\"" # (except of fixed last layer, not in hierar.)
-ALIGN_SEL=${ALIGN_SEL}", \"TIBHalfBarrels,111001\""
-ALIGN_SEL=${ALIGN_SEL}", \"TOBHalfBarrels,111001\""
+#ALIGN_SEL="\"PixelHalfBarrels,rrrrrr\""
+##ALIGN_SEL=${ALIGN_SEL}", \"PixelHalfBarrelLayers,111001\""
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers12,111001\"" # 4 params for double sided barrel
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsLayers35,101001\"" # 3 params for single sided barrel
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,c0c00c\"" # (except of fixed last layer)
+##ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsLayers66,C0C00C\"" # (except of fixed last layer, not in hierar.)
+##ALIGN_SEL=${ALIGN_SEL}", \"TIBHalfBarrels,111001\""
+##ALIGN_SEL=${ALIGN_SEL}", \"TOBHalfBarrels,111001\""
 
 ## NOTE 2006/11 A
 #ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""  # fix pixel
@@ -159,7 +170,8 @@ DO_MISALIGN=true # false echo NO misalignment!
 ###
 ##############################################################
 
-THE_TAR=all.tar
+# THE_TAR=all.tar
+THE_TAR=all.tgz
 
 mkdir $SUBMIT_DIR # Do not use -p option: Next check does not work then!
 if [ $? -ne 0 ] ; then 
@@ -173,10 +185,12 @@ if [ $? -ne 0 ] ; then
 fi
 cp $0 $SUBMIT_DIR
 cd $BASE_DIR
-tar rf $THE_TAR src/*/*/*/*.cf? lib/* module/*
-gzip $THE_TAR
-$CP_RESULT $CP_RESULT_OPT $THE_TAR.gz $RESULTDIR #> /dev/null
-rm $THE_TAR.gz
+#tar rf $THE_TAR src/*/*/*/*.cf? lib/* module/*
+#gzip $THE_TAR
+#$CP_RESULT $CP_RESULT_OPT $THE_TAR.gz $RESULTDIR #> /dev/null
+tar czf $THE_TAR src/*/*/*/*.cf? lib/* module/*
+$CP_RESULT $CP_RESULT_OPT $THE_TAR $RESULTDIR #> /dev/null
+#rm $THE_TAR.gz
 cd $SUBMIT_DIR
 
 echo
@@ -239,10 +253,12 @@ process Alignment = {
         PSet geomSel = {
             vdouble etaRanges = {$ALIGN_ETA_SEL}  vdouble phiRanges = {$ALIGN_PHI_SEL}
             vdouble zRanges   = {$ALIGN_Z_SEL}    vdouble rRanges   = {$ALIGN_R_SEL}
+	    vdouble xRanges = {}  vdouble yRanges = {}
         }
         PSet geomSel2 = {
             vdouble etaRanges = {$ALIGN_ETA_SEL2}  vdouble phiRanges = {$ALIGN_PHI_SEL2}
             vdouble zRanges   = {$ALIGN_Z_SEL2}    vdouble rRanges   = {$ALIGN_R_SEL2}
+	    vdouble xRanges = {}  vdouble yRanges = {}
         }
     }
 
@@ -251,12 +267,14 @@ process Alignment = {
     replace AlignmentProducer.MisalignmentScenario.TPBs.scale = 0.
 #    replace AlignmentProducer.MisalignmentScenario.TPBs = {
 #	string distribution = "flat"
-#	PSet PixelHalfBarrelLayers = {
-#	    double dXlocal = 0.03 double dYlocal = -0.05 double dZlocal = 0.1 
-#	    double phiXlocal = 0.0001 double phiYlocal = 0.00008 double phiZlocal = 0.00004
-#	    }
+#        double dXlocal = 0.03 double dYlocal = 0.03 double dZlocal = 0.05 
+#	double phiXlocal = 0.0002 double phiYlocal = 0.0002 double phiZlocal = 0.0008
+##	PSet PixelHalfBarrelLayers = {
+##	    double dXlocal = 0.03 double dYlocal = 0.05 double dZlocal = 0.1 
+##	    double phiXlocal = 0.0001 double phiYlocal = 0.00004 double phiZlocal = 0.00008
+##	    }
 #    }
-##    replace AlignmentProducer.MisalignmentScenario.TPBs.Dets = { double scale = 0.}
+#    replace AlignmentProducer.MisalignmentScenario.TPBs.Dets = { double scale = 0.}
     replace AlignmentProducer.MisalignmentScenario.TPEs.scale = 0.
     replace AlignmentProducer.MisalignmentScenario.TECs.scale = 0.
     replace AlignmentProducer.MisalignmentScenario.TIDs.scale = 0.
@@ -289,6 +307,8 @@ process Alignment = {
     replace MillePedeAlignmentAlgorithm.pedeSteerer.method = "inversion  9  0.8"
     replace MillePedeAlignmentAlgorithm.pedeSteerer.options = {
 	 "chisqcut  20.0  4.5" }  #{ "outlierdownweighting 3", "dwfractioncut 0.1" }
+#    include "Alignment/MillePedeAlignmentAlgorithm/data/PresigmaScenarios.cff"
+#    replace MillePedeAlignmentAlgorithm.pedeSteerer.Presigmas += TrackerShortTermPresigmas.Presigmas
 
 # refitting for normal tracks...
     include "RecoTracker/TrackProducer/data/RefitterWithMaterial.cff"
@@ -307,8 +327,8 @@ process Alignment = {
  	untracked int32 maxEvents   = EVTS_PER_JOB
 	untracked uint32 skipEvents = SKIP_EVTS
     }
-#    include "Alignment/MillePedeAlignmentAlgorithm/test/RERECO_131_mutracks_1_202_all.cff"
     FILE_REPLACE
+#    SOURCE_REPLACE
 
     path p = { AlignmentTracks, TrackRefitter }
 
@@ -382,11 +402,14 @@ echo old CMSSW_BASE: \$CMSSW_BASE
 scramv1 project CMSSW ${CMSSW_VERS} > /dev/null
 cd ${CMSSW_VERS}
 echo CMMSW area created in \$(pwd) .
-echo Copy $RESULTDIR/$THE_TAR.gz...
+#echo Copy $RESULTDIR/$THE_TAR.gz...
+echo Copy $RESULTDIR/$THE_TAR...
 echo ...to \$(pwd) and unpack.
-$CP_RESULT $CP_RESULT_OPT $RESULTDIR/$THE_TAR.gz .
-gunzip $THE_TAR.gz
-tar xf $THE_TAR
+#$CP_RESULT $CP_RESULT_OPT $RESULTDIR/$THE_TAR.gz .
+$CP_RESULT $CP_RESULT_OPT $RESULTDIR/$THE_TAR .
+#gunzip $THE_TAR.gz
+# tar xf $THE_TAR
+tar xzf $THE_TAR
 rm $THE_TAR
 eval \`scramv1 runtime -sh\`
 rehash
