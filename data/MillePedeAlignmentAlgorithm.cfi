@@ -40,7 +40,9 @@ block MillePedeAlignmentAlgorithm = {
 	# ------------------------------------------------------------------------------
 	# All this is determined from what is given as 
 	# AlignmentProducer.ParameterBuilder.Selector, cf. Twiki page SWGuideMillepedeIIAlgorithm.
+	VPSet Presigmas = {} 
     }
+
     PSet pedeReader = {
         string readFile = "millepede.res"
 	# directory of 'readFile', if empty:
