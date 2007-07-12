@@ -1,0 +1,6 @@
+# lines starting with '#' will be ignored
+# some files are missing in merging...
+rfio:/castor/cern.ch/user/r/rwolf/mc-physval-120-ZToMuMu-NoPU/RERECO_131_mutracks_001_050.root
+rfio:/castor/cern.ch/user/r/rwolf/mc-physval-120-ZToMuMu-NoPU/RERECO_131_mutracks_051_100.root
+rfio:/castor/cern.ch/user/r/rwolf/mc-physval-120-ZToMuMu-NoPU/RERECO_131_mutracks_101_150.root
+rfio:/castor/cern.ch/user/r/rwolf/mc-physval-120-ZToMuMu-NoPU/RERECO_131_mutracks_151_202.root
