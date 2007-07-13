@@ -1,5 +1,7 @@
 # MillePedeAlignmentAlgorithm
 # ---------------------------
+include "Alignment/ReferenceTrajectories/data/TrajectoryFactories.cff"
+
 block MillePedeAlignmentAlgorithm = {
     string algoName = "MillePedeAlignmentAlgorithm"
     untracked string mode = "full" # possible modes: full, mille, pede, pedeSteer, pedeRun, pedeRead
@@ -48,6 +50,12 @@ block MillePedeAlignmentAlgorithm = {
 	# directory of 'readFile', if empty:
 	# take from pedeSteerer (inheriting from MillePedeAlignmentAlgorithm)
         untracked string fileDir = ""
+    }
+
+    PSet TrajectoryFactory = { 
+	using ReferenceTrajectoryFactory # from TrajectoryFactories
+	# using BzeroReferenceTrajectoryFactory
+	# using TwoBodyDecayReferenceTrajectoryFactory
     }
     int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
     bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivatives
