@@ -1,0 +1,208 @@
+# lines starting with '#' will be ignored
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_1a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_1b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_1c.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_1d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_2a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_2b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_2c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_2d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_3a.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_3b.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_3c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_3d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_4a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_4b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_4c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_4d.root
+# new:
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_5a.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_5b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_5c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_5d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_6a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_6b.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_6c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_6d.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_7a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_7b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_7c.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_7d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_8a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_8b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_8c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_8d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_9a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_9b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_9c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_9d.root
+#
+#
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_10a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_10b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_10c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_10d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_11a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_11b.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_11c.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_11d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_12a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_12b.root
+# new:
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_12c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_12d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_13a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_13b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_13c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_13d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_14a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_14b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_14c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_14d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_15a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_15b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_15c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_15d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_16a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_16b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_16c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_16d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_17a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_17b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_17c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_17d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_18a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_18b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_18c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_18d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_19a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_19b.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_19c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_19d.root
+#
+#
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_20a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_20b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_20c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_20d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_21a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_21b.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_21c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_21d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_22a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_22b.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_22c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_22d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_23a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_23b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_23c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_23d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_24a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_24b.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_24c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_24d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_25a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_25b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_25c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_25d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_26a.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_26b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_26c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_26d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_27a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_27b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_27c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_27d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_28a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_28b.root
+# rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_28b.root
+# newer:
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_28d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_29a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_29b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_29c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_29d.root
+#
+#
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_30a.root
+# new:
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_30b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_30c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_30d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_31a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_31b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_31c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_31d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_32a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_32b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_32c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_32d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_33a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_33b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_33c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_33d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_34a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_34b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_34c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_34d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_35a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_35b.root
+# newer:
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_35c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_35d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_36a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_36b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_36c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_36d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_37a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_37b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_37c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_37d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_38a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_38b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_38c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_38d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_39a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_39b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_39c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_39d.root
+#
+#
+# new:
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_40a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_40b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_40c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_40d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_41a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_41b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_41c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_41d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_42a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_42b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_42c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_42d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_43a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_43b.root
+# new:
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_43c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_43d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_44a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_44b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_44c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_44d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_45a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_45b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_45c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_45d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_46a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_46b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_46c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_46d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_47a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_47b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_47c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_47d.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_48a.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_48b.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_48c.root
+rfio:/castor/cern.ch/user/f/flucke/alignment/cosmics/CosmicMuonsUndergroundTracker/CMSSW_1_3_4-Spring07-1958/CMSSW_1_3_5-4/cosmics_alcarecoPlus_135patched3_file_48d.root
