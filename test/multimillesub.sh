@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.6.2.5 $ from $Date: 2007/06/21 12:57:13 $ by $Author: flucke $
+# $Revision: 1.6.2.6 $ from $Date: 2007/07/12 16:03:28 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -26,9 +26,11 @@ fi
 ############################################################
 
 DO_SUBMIT=1 # if 0, do all but commit jobs
-#FILES_FILE=RERECO_131_mutracks_1_202.txt # file where to find file names to run on. 
-FILES_FILE=RERECO_131_mutracks_1_202_merged.txt # file where to find file names to run on. 
-            # if empty: assume files in cfg and select via events
+# File where to find file names to run on:  (if empty assume files in cfg and select via events)
+#FILES_FILE=RERECO_131_mutracks_1_202_merged.txt
+#FILES_FILE=ZMUMU_ALCARECO.txt
+FILES_FILE=CosmicMuonsUnderground_135patched.txt # cosmics
+
 if [ $#FILES_FILE != 0 ]; then
     integer FILES_PER_JOB=$EVTS_PER_JOB
     EVTS_PER_JOB=-1
@@ -60,7 +62,9 @@ CP_RESULT_OPT="-r"
 # Must be cd-able (scripts are copied here and executed):
 SUBMIT_DIR=${HOME}/scratch0/submit/${OUT_DIR}
 
-INPUTTAG=ctfWithMaterialTracks #AlCaRecoCSA06ZMuMu
+#INPUTTAG=ctfWithMaterialTracks # Zmumu
+INPUTTAG=ctfWithMaterialTracksP5 # cosmics
+#INPUTTAG=AlCaRecoCSA06ZMuMu # Zmumu ALCARECO
 
 ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
 ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsDS,111001,geomSel\"" # 4 params for double sided barrel
@@ -93,6 +97,18 @@ ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixe
 #ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,1f1001,geomSel\""   # fix global z/local y for...
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001,geomSel\"" #  ...single sided TIB and TOB
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
+
+## NOTE 2006/11 A, no eta cut
+#ALIGN_SEL="\"PixelHalfBarrelLayers,fff00f\""  # fix pixel
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsDS,111001\"" # 4 params for double sided barrel
+#ALIGN_SEL=${ALIGN_SEL}", \"TIBRodsSS,1f1001\""   # fix global z/local y for...
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers15,1f1001\"" #  ...single sided TIB and TOB
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c\"" # (except of fixed last layer)
+
+## barrel rods/ladders, no reference
+#ALIGN_SEL="\"PixelHalfBarrelLadders,rrr00r\""  # fix pixel
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsDS,rrr00r\"" # 4 params for double sided barrel
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelRodsSS,r0r00r\""   # fix global z/local y for...
 
 #ALIGN_SEL="\"PixelHalfBarrelLadders,fff00f\""
 #ALIGN_SEL=${ALIGN_SEL}", \"BarrelLayersSS,110000\""
@@ -144,6 +160,21 @@ ALIGN_SEL=${ALIGN_SEL}", \"TOBRodsSSLayers66,cfc00c,geomSel\"" # (except of fixe
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBDetsSSLayers15,1f1001,geomSel\"" # single sided TOB free
 #ALIGN_SEL=${ALIGN_SEL}", \"TOBDetsSSLayers66,cfc00c,geomSel\"" # (except of fixed last layer)
 
+# Markus' full study:
+#ALIGN_SEL="\"PixelDets,111001\""  # fix pixel
+#ALIGN_SEL=${ALIGN_SEL}", \"PixelHalfBarrels,rrrrrr\""
+#ALIGN_SEL=${ALIGN_SEL}", \"PXEndCaps,111111\""
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelDetsDS,111001\"" # 4 params for double sided barrel
+#ALIGN_SEL=${ALIGN_SEL}", \"BarrelDetsSS,101001\"" # 3 params for single sided barrel
+#ALIGN_SEL=${ALIGN_SEL}", \"TIBHalfBarrels,111111\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TOBHalfBarrels,111111\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TIDDets,111001,tecDS\"" # selection for TEC and TID are the same
+#ALIGN_SEL=${ALIGN_SEL}", \"TIDDets,101001,tecSS\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TIDs,111111\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TECDets,111001,tecDS\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TECDets,101001,tecSS\""
+#ALIGN_SEL=${ALIGN_SEL}", \"TECs,111111\""
+
 # the following is put into PSet geomSel...  
 ALIGN_ETA_SEL="-0.9, 0.9"
 ALIGN_Z_SEL="" # empty array means no restriction: 
@@ -185,12 +216,8 @@ if [ $? -ne 0 ] ; then
 fi
 cp $0 $SUBMIT_DIR
 cd $BASE_DIR
-#tar rf $THE_TAR src/*/*/*/*.cf? lib/* module/*
-#gzip $THE_TAR
-#$CP_RESULT $CP_RESULT_OPT $THE_TAR.gz $RESULTDIR #> /dev/null
 tar czf $THE_TAR src/*/*/*/*.cf? lib/* module/*
 $CP_RESULT $CP_RESULT_OPT $THE_TAR $RESULTDIR #> /dev/null
-#rm $THE_TAR.gz
 cd $SUBMIT_DIR
 
 echo
@@ -228,18 +255,23 @@ process Alignment = {
         InputTag src = $INPUTTAG # FIXME: templetise?
         bool filter = false
         bool applyBasicCuts = true
-        double ptMin   = 10. #5. 
+#        double ptMin   = 15. # Markus mu from Zmumu
+        double ptMin   = 10. # cosmics
         double ptMax   = 999.
         double etaMin  = -2.4
         double etaMax  =  2.4
         double phiMin  = -3.1416
         double phiMax  =  3.1416
-        double nHitMin = 10
+#        double nHitMin = 10 # Zmumu
+        double nHitMin = 16 # cosmics
         double nHitMax = 99
-        double chi2nMax= 999. #999999.
-        bool applyNHighestPt = false
-        int32 nHighestPt = 2
-        bool applyMultiplicityFilter = true
+#        double chi2nMax= 9999. # Zmumu
+        double chi2nMax= 999. # cosmics
+        bool applyNHighestPt = true # false
+#        int32 nHighestPt = 2 # Z mumu
+        int32 nHighestPt = 1 # cosmics
+#        bool applyMultiplicityFilter = false # Zmumu
+        bool applyMultiplicityFilter = true # cosmics
         int32 minMultiplicity = 1
     }
     
@@ -260,37 +292,53 @@ process Alignment = {
             vdouble zRanges   = {$ALIGN_Z_SEL2}    vdouble rRanges   = {$ALIGN_R_SEL2}
 	    vdouble xRanges = {}  vdouble yRanges = {}
         }
+
+        PSet tecSS = {
+            vdouble etaRanges = {}  vdouble phiRanges = {} vdouble zRanges = {}
+	    vdouble rRanges   = {40., 60., 75., 999.}
+	    vdouble xRanges = {}  vdouble yRanges = {}
+        }
+        PSet tecDS = {
+            vdouble etaRanges = {}  vdouble phiRanges = {} vdouble zRanges = {}
+	    vdouble rRanges   = {0., 40., 60., 75.}
+	    vdouble xRanges = {}  vdouble yRanges = {}
+        }
+
     }
 
     replace AlignmentProducer.doMisalignmentScenario = $DO_MISALIGN
-    replace MisalignmentScenarioSettings.setError = false #replace in block defined Scenarios.cff
-    replace AlignmentProducer.MisalignmentScenario.TPBs.scale = 0.
-#    replace AlignmentProducer.MisalignmentScenario.TPBs = {
-#	string distribution = "flat"
-#        double dXlocal = 0.03 double dYlocal = 0.03 double dZlocal = 0.05 
-#	double phiXlocal = 0.0002 double phiYlocal = 0.0002 double phiZlocal = 0.0008
-##	PSet PixelHalfBarrelLayers = {
-##	    double dXlocal = 0.03 double dYlocal = 0.05 double dZlocal = 0.1 
-##	    double phiXlocal = 0.0001 double phiYlocal = 0.00004 double phiZlocal = 0.00008
-##	    }
-#    }
-#    replace AlignmentProducer.MisalignmentScenario.TPBs.Dets = { double scale = 0.}
-    replace AlignmentProducer.MisalignmentScenario.TPEs.scale = 0.
-    replace AlignmentProducer.MisalignmentScenario.TECs.scale = 0.
-    replace AlignmentProducer.MisalignmentScenario.TIDs.scale = 0.
-    replace AlignmentProducer.MisalignmentScenario.TIBs.Dets = { double scale = 0.}
+#    replace MisalignmentScenarioSettings.setError = false #replace in block defined Scenarios.cff FIXME
+    replace AlignmentProducer.MisalignmentScenario = {
+	using TrackerORCAShortTermScenario
+    }
+
+#    replace AlignmentProducer.MisalignmentScenario.TPBs.scale = 0.
+##    replace AlignmentProducer.MisalignmentScenario.TPBs = {
+##	string distribution = "flat"
+##        double dXlocal = 0.03 double dYlocal = 0.03 double dZlocal = 0.05 
+##	double phiXlocal = 0.0002 double phiYlocal = 0.0002 double phiZlocal = 0.0008
+###	PSet PixelHalfBarrelLayers = {
+###	    double dXlocal = 0.03 double dYlocal = 0.05 double dZlocal = 0.1 
+###	    double phiXlocal = 0.0001 double phiYlocal = 0.00004 double phiZlocal = 0.00008
+###	    }
+##    }
+##    replace AlignmentProducer.MisalignmentScenario.TPBs.Dets = { double scale = 0.}
+#    replace AlignmentProducer.MisalignmentScenario.TPEs.scale = 0.
+#    replace AlignmentProducer.MisalignmentScenario.TECs.scale = 0.
+#    replace AlignmentProducer.MisalignmentScenario.TIDs.scale = 0.
+#    replace AlignmentProducer.MisalignmentScenario.TIBs.Dets = { double scale = 0.}
+###    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
+###    replace AlignmentProducer.MisalignmentScenario.TIBs.phiZ = 0.
 ##    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
-##    replace AlignmentProducer.MisalignmentScenario.TIBs.phiZ = 0.
-#    replace AlignmentProducer.MisalignmentScenario.TIBs.scale = 0.
-    replace AlignmentProducer.MisalignmentScenario.TOBs.Dets = { double scale = 0.}
-##    replace AlignmentProducer.MisalignmentScenario.TOBs.phiZ = 0.
-##    replace AlignmentProducer.MisalignmentScenario.TOBs.scale = 0.
-#   replaces AlignmentProducer.MisalignmentScenario:
-#    include "Alignment/MillePedeAlignmentAlgorithm/test/myMisalignmentScenario.cff"
-#    include "Alignment/MillePedeAlignmentAlgorithm/test/MisalignBarrelLayer.cff" 
-#    replace AlignmentProducer.MisalignmentScenario = {
-#	using MisalignBarrelLayer # setError already false!
-#    }
+#    replace AlignmentProducer.MisalignmentScenario.TOBs.Dets = { double scale = 0.}
+###    replace AlignmentProducer.MisalignmentScenario.TOBs.phiZ = 0.
+###    replace AlignmentProducer.MisalignmentScenario.TOBs.scale = 0.
+##   replaces AlignmentProducer.MisalignmentScenario:
+##    include "Alignment/MillePedeAlignmentAlgorithm/test/myMisalignmentScenario.cff"
+##    include "Alignment/MillePedeAlignmentAlgorithm/test/MisalignBarrelLayer.cff" 
+##    replace AlignmentProducer.MisalignmentScenario = {
+##	using MisalignBarrelLayer # setError already false!
+##    }
     replace AlignmentProducer.algoConfig = {
 	using MillePedeAlignmentAlgorithm
     }
@@ -302,22 +350,28 @@ process Alignment = {
     replace MillePedeAlignmentAlgorithm.mergeTreeFiles = {MERGE_TREE_FILES}
     replace MillePedeAlignmentAlgorithm.monitorFile = "millePedeMonitorSUFFIX.root"
 
+    replace MillePedeAlignmentAlgorithm.pedeSteerer.pedeCommand =
+      "/afs/cern.ch/user/f/flucke/cms/pede/versWebEndMay2007/pede_new"
     replace MillePedeAlignmentAlgorithm.pedeSteerer.steerFile = "pedeSteerSUFFIX"
     replace MillePedeAlignmentAlgorithm.pedeSteerer.pedeDump = "pedeSUFFIX.dump"
-    replace MillePedeAlignmentAlgorithm.pedeSteerer.method = "inversion  9  0.8"
+    replace MillePedeAlignmentAlgorithm.pedeSteerer.method = "sparseGMRES 5 1." # "inversion  9  0.8"
     replace MillePedeAlignmentAlgorithm.pedeSteerer.options = {
-	 "chisqcut  20.0  4.5" }  #{ "outlierdownweighting 3", "dwfractioncut 0.1" }
-#    include "Alignment/MillePedeAlignmentAlgorithm/data/PresigmaScenarios.cff"
-#    replace MillePedeAlignmentAlgorithm.pedeSteerer.Presigmas += TrackerShortTermPresigmas.Presigmas
+	 "entries 30", "outlierdownweighting 4", "dwfractioncut 0.2",
+	    "bandwidth 6"}  #{ "chisqcut  20.0  4.5" }
+    include "Alignment/MillePedeAlignmentAlgorithm/data/PresigmaScenarios.cff"
+    replace MillePedeAlignmentAlgorithm.pedeSteerer.Presigmas += TrackerORCAShortTermPresigmasDetBy10.Presigmas
+    replace MillePedeAlignmentAlgorithm.minNumHits = 8 # Markus ? Zmumu 5 is default
+#    replace MillePedeAlignmentAlgorithm.minNumHits = 16 # cos
 
 # refitting for normal tracks...
     include "RecoTracker/TrackProducer/data/RefitterWithMaterial.cff"
-    include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilderWithoutRefit.cfi"
     replace TrackRefitter.src = "AlignmentTracks"
     replace TrackRefitter.TrajectoryInEvent = true
-    replace TrackRefitter.TTRHBuilder = "WithoutRefit"# TransientTrackingRecHitBuilder: no refit of hits...
-    replace ttrhbwor.Matcher = "StandardMatcher" # ... but with matching for strip stereo!
-    
+    # cosmics with full refit!
+#    include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilderWithoutRefit.cfi" # Zmumu
+#    replace TrackRefitter.TTRHBuilder = "WithoutRefit"# TransientTrackingRecHitBuilder: no refit of hits... # Zmumu
+#    replace ttrhbwor.Matcher = "StandardMatcher" # ... but with matching for strip stereo! # Zmumu
+#    
     # input file
     # source = EmptySource {untracked int32 maxEvents = EVTS_PER_JOB}
     source = PoolSource { 
@@ -402,7 +456,6 @@ echo old CMSSW_BASE: \$CMSSW_BASE
 scramv1 project CMSSW ${CMSSW_VERS} > /dev/null
 cd ${CMSSW_VERS}
 echo CMMSW area created in \$(pwd) .
-#echo Copy $RESULTDIR/$THE_TAR.gz...
 echo Copy $RESULTDIR/$THE_TAR...
 echo ...to \$(pwd) and unpack.
 #$CP_RESULT $CP_RESULT_OPT $RESULTDIR/$THE_TAR.gz .
@@ -506,7 +559,7 @@ if [ $#FILES_FILE -eq 0 ]; then
     SKIP_EVTS=$[$SKIP_EVTS+$EVTS_PER_JOB]
 fi
 if [ $DO_SUBMIT -ne 0 ]; then
-    sleep 10
+    sleep 5
 fi
 ROUND=$[$ROUND+1]
 done # while loop
