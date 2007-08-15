@@ -9,11 +9,10 @@ block MillePedeAlignmentAlgorithm = {
 
     # Where mille writes (and pede reads) derivatives, labels etc.
     string binaryFile = "milleBinary.dat"
-    # Resulting and initial arameters, absolute (original) positions, result etc.
+    # Resulting and initial parameters, absolute (original) positions, result etc.
     string treeFile   = "treeFile.root" 
-    # Must be empty if mille runs, otherwise should be parallel with treeFiles from production
-    # of binaryFiles above:
-    # If only pede, but not mille is run: List of files to 'merge'.
+    # Must be empty if mille runs, otherwise for merging (pede) jobs should be parallel with each
+    # other. Then 'treeFile' is merged result and 'binaryFile' should be empty.
     vstring mergeBinaryFiles = {}
     vstring mergeTreeFiles   = {}
 
@@ -32,17 +31,19 @@ block MillePedeAlignmentAlgorithm = {
 	untracked int32 parameterSign = 1 # old pede versions (before May '07) need a sign flip
 	untracked string pedeDump = "pede.dump"
 	string method = "inversion  6  0.8" # <method>  n(iter)  Delta(F)
-	vstring options = {"chisqcut  20.0  4.5"}#{, 
-#		               "outlierdownweighting 3",
-#		               "dwfractioncut 0.1",
-#                                   "bandwidth 6" }
-
+	vstring options = {
+	    "entries 30", # min. number of measurements (parameters with less will be skipped)
+	    # "chisqcut  20.0  4.5", # simple chi^2 cut for outliers
+	    # "outlierdownweighting 3", "dwfractioncut 0.1" #, # 3x Huber down weighting
+	    "outlierdownweighting 4", "dwfractioncut 0.2" # 3x Huber + 1x Cauchy down weighting
+	    #, "bandwidth 6"  # for method sparseGMRES for preconditioning
+	}
 	
 	# Special selection of parameters to fix, use as reference coordinate system etc.
 	# ------------------------------------------------------------------------------
 	# All this is determined from what is given as 
 	# AlignmentProducer.ParameterBuilder.Selector, cf. Twiki page SWGuideMillepedeIIAlgorithm.
-	VPSet Presigmas = {} 
+	VPSet Presigmas = {}
     }
 
     PSet pedeReader = {
