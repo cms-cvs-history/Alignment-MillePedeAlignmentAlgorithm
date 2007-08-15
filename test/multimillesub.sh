@@ -1,5 +1,5 @@
 #!/bin/zsh 
-# $Revision: 1.9 $ from $Date: 2007/07/12 17:32:40 $ by $Author: flucke $
+# $Revision: 1.10 $ from $Date: 2007/08/15 10:00:05 $ by $Author: flucke $
 if  [ $# -lt 3 -o $# -gt 4 ]; then     
     echo
     echo "Wrong number of arguments!"
@@ -214,17 +214,8 @@ if [ $? -ne 0 ] ; then
 fi
 cp $0 $SUBMIT_DIR
 cd $BASE_DIR
-<<<<<<< multimillesub.sh
-#tar rf $THE_TAR src/*/*/*/*.cf? lib/* module/*
-#gzip $THE_TAR
-#$CP_RESULT $CP_RESULT_OPT $THE_TAR.gz $RESULTDIR #> /dev/null
 tar czf $THE_TAR src/*/*/*/*.cf? lib/* module/*
 $CP_RESULT $CP_RESULT_OPT $THE_TAR $RESULTDIR #> /dev/null
-#rm $THE_TAR.gz
-=======
-tar czf $THE_TAR src/*/*/*/*.cf? lib/* module/*
-$CP_RESULT $CP_RESULT_OPT $THE_TAR $RESULTDIR #> /dev/null
->>>>>>> 1.6.2.7
 cd $SUBMIT_DIR
 
 echo
