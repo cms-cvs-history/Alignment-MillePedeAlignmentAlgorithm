@@ -53,5 +53,8 @@ block MillePedeAlignmentAlgorithm = {
         untracked string fileDir = ""
     }
     int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
-    bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivatives
+    bool useTrackTsos = true # Tsos from track or from reference trajectory for global derivatives
+    # If skipInvalidHits true, the invalid hits are not passed to the ReferenceTrajectory to avoid
+    # that the RefTraj. becomes itself invalid; useTrackTsos will then be set to false.
+    bool skipInvalidHits = false 
 }

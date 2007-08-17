@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.16.2.6 $
- *  $Date: 2007/07/12 15:30:53 $
+ *  $Revision: 1.16.2.7 $
+ *  $Date: 2007/08/15 08:38:19 $
  *  (last update by $Author: flucke $)
  */
 
@@ -57,8 +57,15 @@ MillePedeAlignmentAlgorithm::MillePedeAlignmentAlgorithm(const edm::ParameterSet
   theDir(theConfig.getUntrackedParameter<std::string>("fileDir")),
   theAlignmentParameterStore(0), theAlignables(), theAlignableNavigator(0),
   theMonitor(0), theMille(0), thePedeSteer(0), theMinNumHits(cfg.getParameter<int>("minNumHits")),
-  theUseTrackTsos(cfg.getParameter<bool>("useTrackTsos"))
+  theUseTrackTsos(cfg.getParameter<bool>("useTrackTsos")),
+  theSkipInvalidHits(cfg.getParameter<bool>("skipInvalidHits"))
 {
+  if (theSkipInvalidHits && theUseTrackTsos) {
+    edm::LogWarning("Alignment") << "@SUB=MillePedeAlignmentAlgorithm"
+				 << "skipInvalidHits not compatible with useTrackTsos=true,"
+				 << " overwrite to useTrackTsos=false";
+    theUseTrackTsos = false;
+  }
   if (!theDir.empty() && theDir.find_last_of('/') != theDir.size()-1) theDir += '/';// may need '/'
   edm::LogInfo("Alignment") << "@SUB=MillePedeAlignmentAlgorithm" << "Start in mode '"
                             << theConfig.getUntrackedParameter<std::string>("mode")
@@ -231,10 +238,17 @@ ReferenceTrajectoryBase::ReferenceTrajectoryPtr MillePedeAlignmentAlgorithm::ref
                                << "Trajectory neither along nor opposite to momentum.";
   }
 
-  ReferenceTrajectoryBase::ReferenceTrajectoryPtr refTrajPtr =
-    new ReferenceTrajectory(refTsos, traj->recHits(), backwardHits,
-			    magField, ReferenceTrajectoryBase::combined); //none);//energyLoss);
+  TransientTrackingRecHit::ConstRecHitContainer validRecHits;
+  const Trajectory::DataContainer &trMeas = traj->measurements();
+  for (Trajectory::DataContainer::const_iterator iM = trMeas.begin(); iM != trMeas.end(); ++iM) {
+    ConstRecHitPointer hitPtr = (*iM).recHit();
+    if (!theSkipInvalidHits || hitPtr->isValid()) validRecHits.push_back(hitPtr);
+  }
 
+  ReferenceTrajectoryBase::ReferenceTrajectoryPtr refTrajPtr =
+    //    new ReferenceTrajectory(refTsos, traj->recHits(), backwardHits,
+    new ReferenceTrajectory(refTsos, validRecHits, backwardHits,
+			    magField, ReferenceTrajectoryBase::combined); //none);//energyLoss);
   if (theMonitor) theMonitor->fillRefTrajectory(refTrajPtr);
 
   return refTrajPtr;

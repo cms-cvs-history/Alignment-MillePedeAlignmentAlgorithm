@@ -7,8 +7,8 @@
 ///
 ///  \author    : Gero Flucke
 ///  date       : October 2006
-///  $Revision: 1.9.2.2 $
-///  $Date: 2007/05/18 13:14:57 $
+///  $Revision: 1.9.2.3 $
+///  $Date: 2007/06/13 09:00:46 $
 ///  (last update by $Author: flucke $)
 
 
@@ -110,6 +110,7 @@ class MillePedeAlignmentAlgorithm : public AlignmentAlgorithmBase
   PedeSteerer              *thePedeSteer;
   int                       theMinNumHits;
   bool                      theUseTrackTsos;
+  bool                      theSkipInvalidHits;
 
   std::vector<float>        theFloatBufferX;
   std::vector<float>        theFloatBufferY;
