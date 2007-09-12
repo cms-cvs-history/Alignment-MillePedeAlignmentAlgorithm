@@ -7,8 +7,8 @@
 ///
 ///  \author    : Gero Flucke
 ///  date       : October 2006
-///  $Revision: 1.9.2.3 $
-///  $Date: 2007/06/13 09:00:46 $
+///  $Revision: 1.9.2.4 $
+///  $Date: 2007/08/17 17:17:38 $
 ///  (last update by $Author: flucke $)
 
 
@@ -61,7 +61,7 @@ class MillePedeAlignmentAlgorithm : public AlignmentAlgorithmBase
   enum MeasurementDirection {kLocalX = 0, kLocalY};
 
   ReferenceTrajectoryBase::ReferenceTrajectoryPtr
-    referenceTrajectory(const TrajectoryStateOnSurface &refTsos,
+    referenceTrajectory(const std::vector<TrajectoryStateOnSurface> &orderedTsos,
 			const Trajectory *traj, const MagneticField *magField) const;
   /// If hit is usable: callMille for x and (probably) y direction.
   /// If globalDerivatives fine: returns 2 if 2D-hit, 1 if 1D-hit, 0 if no Alignable for hit.
@@ -111,6 +111,7 @@ class MillePedeAlignmentAlgorithm : public AlignmentAlgorithmBase
   int                       theMinNumHits;
   bool                      theUseTrackTsos;
   bool                      theSkipInvalidHits;
+  bool                      theReversePropagation;
 
   std::vector<float>        theFloatBufferX;
   std::vector<float>        theFloatBufferY;

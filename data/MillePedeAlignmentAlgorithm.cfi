@@ -57,4 +57,7 @@ block MillePedeAlignmentAlgorithm = {
     # If skipInvalidHits true, the invalid hits are not passed to the ReferenceTrajectory to avoid
     # that the RefTraj. becomes itself invalid; useTrackTsos will then be set to false.
     bool skipInvalidHits = false 
+    # If reversePropagation is true, propagfate from last to first hit, 
+    # i.e. use reverse (wrong...) multiple scattering estimate...
+    bool reversePropagation = false
 }

@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.16.2.7 $
- *  $Date: 2007/08/15 08:38:19 $
+ *  $Revision: 1.16.2.8 $
+ *  $Date: 2007/08/17 17:17:39 $
  *  (last update by $Author: flucke $)
  */
 
@@ -58,7 +58,8 @@ MillePedeAlignmentAlgorithm::MillePedeAlignmentAlgorithm(const edm::ParameterSet
   theAlignmentParameterStore(0), theAlignables(), theAlignableNavigator(0),
   theMonitor(0), theMille(0), thePedeSteer(0), theMinNumHits(cfg.getParameter<int>("minNumHits")),
   theUseTrackTsos(cfg.getParameter<bool>("useTrackTsos")),
-  theSkipInvalidHits(cfg.getParameter<bool>("skipInvalidHits"))
+  theSkipInvalidHits(cfg.getParameter<bool>("skipInvalidHits")),
+  theReversePropagation(cfg.getParameter<bool>("reversePropagation"))
 {
   if (theSkipInvalidHits && theUseTrackTsos) {
     edm::LogWarning("Alignment") << "@SUB=MillePedeAlignmentAlgorithm"
@@ -188,7 +189,7 @@ void MillePedeAlignmentAlgorithm::run(const edm::EventSetup &setup,
     if (theMonitor) theMonitor->fillTrack(track);
 
     ReferenceTrajectoryBase::ReferenceTrajectoryPtr refTrajPtr = 
-      this->referenceTrajectory(trackTsos.front(), traj, magField);
+      this->referenceTrajectory(trackTsos, traj, magField);
     if (!refTrajPtr->isValid()) continue; // currently e.g. if any invalid hit (FIXME for cosmic?)
     
     std::vector<AlignmentParameters*> parVec(refTrajPtr->recHits().size());//to add hits if all fine
@@ -228,7 +229,7 @@ void MillePedeAlignmentAlgorithm::run(const edm::EventSetup &setup,
 
 //____________________________________________________
 ReferenceTrajectoryBase::ReferenceTrajectoryPtr MillePedeAlignmentAlgorithm::referenceTrajectory
-(const TrajectoryStateOnSurface &refTsos, const Trajectory *traj,
+(const std::vector<TrajectoryStateOnSurface> &orderedTsos, const Trajectory *traj,
  const MagneticField *magField) const
 {
   const PropagationDirection dir = traj->direction();
@@ -245,10 +246,22 @@ ReferenceTrajectoryBase::ReferenceTrajectoryPtr MillePedeAlignmentAlgorithm::ref
     if (!theSkipInvalidHits || hitPtr->isValid()) validRecHits.push_back(hitPtr);
   }
 
-  ReferenceTrajectoryBase::ReferenceTrajectoryPtr refTrajPtr =
-    //    new ReferenceTrajectory(refTsos, traj->recHits(), backwardHits,
-    new ReferenceTrajectory(refTsos, validRecHits, backwardHits,
-			    magField, ReferenceTrajectoryBase::combined); //none);//energyLoss);
+  ReferenceTrajectoryBase::ReferenceTrajectoryPtr refTrajPtr;
+  if (theReversePropagation) {
+    // build inverse of TSOS of last measurement and use reverse ordering of hits
+    const LocalTrajectoryParameters &locTrajPar = orderedTsos.back().localParameters();
+    AlgebraicVector lTrajParVec = locTrajPar.mixedFormatVector();
+    const double pzSignInv = -locTrajPar.pzSign(); // here is the important sign flip
+    const LocalTrajectoryParameters lTrajParInv(lTrajParVec, pzSignInv, locTrajPar.charge()!=0);
+    const TrajectoryStateOnSurface tsosInv(lTrajParInv, orderedTsos.back().surface(), magField);
+
+    refTrajPtr = new ReferenceTrajectory(tsosInv, validRecHits, !backwardHits,
+					 magField, ReferenceTrajectoryBase::combined); //none);//energyLoss);
+  } else {
+    refTrajPtr = new ReferenceTrajectory(orderedTsos.front(), validRecHits, backwardHits,
+					 magField, ReferenceTrajectoryBase::combined); //none);//energyLoss);
+  }
+
   if (theMonitor) theMonitor->fillRefTrajectory(refTrajPtr);
 
   return refTrajPtr;
