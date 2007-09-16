@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.16.2.8 $
- *  $Date: 2007/08/17 17:17:39 $
+ *  $Revision: 1.16.2.9 $
+ *  $Date: 2007/09/12 18:12:26 $
  *  (last update by $Author: flucke $)
  */
 
@@ -28,6 +28,7 @@
 #include "PedeReader.h" // dito
 
 #include "Alignment/CommonAlignmentAlgorithm/interface/ReferenceTrajectory.h"
+//#include "Alignment/CommonAlignmentAlgorithm/interface/BzeroReferenceTrajectory.h"
 #include "Alignment/CommonAlignmentAlgorithm/interface/AlignmentIORoot.h"
 
 #include "Alignment/CommonAlignment/interface/AlignableNavigator.h"
@@ -250,16 +251,22 @@ ReferenceTrajectoryBase::ReferenceTrajectoryPtr MillePedeAlignmentAlgorithm::ref
   if (theReversePropagation) {
     // build inverse of TSOS of last measurement and use reverse ordering of hits
     const LocalTrajectoryParameters &locTrajPar = orderedTsos.back().localParameters();
+    const LocalTrajectoryError &locTrajErr = orderedTsos.back().localError();
     AlgebraicVector lTrajParVec = locTrajPar.mixedFormatVector();
     const double pzSignInv = -locTrajPar.pzSign(); // here is the important sign flip
     const LocalTrajectoryParameters lTrajParInv(lTrajParVec, pzSignInv, locTrajPar.charge()!=0);
-    const TrajectoryStateOnSurface tsosInv(lTrajParInv, orderedTsos.back().surface(), magField);
+    const TrajectoryStateOnSurface tsosInv(lTrajParInv, locTrajErr,
+					   orderedTsos.back().surface(), magField);
 
     refTrajPtr = new ReferenceTrajectory(tsosInv, validRecHits, !backwardHits,
-					 magField, ReferenceTrajectoryBase::combined); //none);//energyLoss);
+					 magField, ReferenceTrajectoryBase::combined);
+//     refTrajPtr = new BzeroReferenceTrajectory(tsosInv, validRecHits, !backwardHits,
+// 					 magField, ReferenceTrajectoryBase::combined);
   } else {
     refTrajPtr = new ReferenceTrajectory(orderedTsos.front(), validRecHits, backwardHits,
-					 magField, ReferenceTrajectoryBase::combined); //none);//energyLoss);
+ 					 magField, ReferenceTrajectoryBase::combined);
+//     refTrajPtr = new BzeroReferenceTrajectory(orderedTsos.front(), validRecHits, backwardHits,
+// 					 magField, ReferenceTrajectoryBase::combined);
   }
 
   if (theMonitor) theMonitor->fillRefTrajectory(refTrajPtr);
