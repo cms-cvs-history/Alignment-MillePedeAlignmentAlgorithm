@@ -53,6 +53,12 @@ block MillePedeAlignmentAlgorithm = {
         untracked string fileDir = ""
     }
 
+    bool readPedeInput = false # if true, following used to read in pede result as input
+    PSet pedeReaderInput = {
+	string readFile = "millepede.res"
+        untracked string fileDir = "./"
+    }
+
     PSet TrajectoryFactory = { 
 	using ReferenceTrajectoryFactory # from TrajectoryFactories
 	# using BzeroReferenceTrajectoryFactory
