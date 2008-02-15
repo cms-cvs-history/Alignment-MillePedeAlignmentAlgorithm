@@ -30,13 +30,13 @@ block MillePedeAlignmentAlgorithm = {
 
 	untracked int32 parameterSign = 1 # old pede versions (before May '07) need a sign flip
 	untracked string pedeDump = "pede.dump"
-	string method = "inversion  6  0.8" # <method>  n(iter)  Delta(F)
+	string method = "sparseGMRES 6  0.8" # "inversion  6  0.8" # <method>  n(iter)  Delta(F)
 	vstring options = {
-	    "entries 30", # min. number of measurements (parameters with less will be skipped)
-	    # "chisqcut  20.0  4.5", # simple chi^2 cut for outliers
-	    # "outlierdownweighting 3", "dwfractioncut 0.1" #, # 3x Huber down weighting
-	    "outlierdownweighting 4", "dwfractioncut 0.2" # 3x Huber + 1x Cauchy down weighting
-	    #, "bandwidth 6"  # for method sparseGMRES for preconditioning
+	    "entries 50", # min. number of measurements (parameters with less will be skipped)
+	    # "chisqcut  20.0  4.5", # simple chi^2 cut for outliers OR ...
+	    # "outlierdownweighting 3", "dwfractioncut 0.1" #, # ... 3x Huber down weighting OR...
+	    "outlierdownweighting 4", "dwfractioncut 0.2", # ...3x Huber + 1x Cauchy down weighting
+	    "bandwidth 6"  # for method sparseGMRES for preconditioning
 	}
 	
 	# Special selection of parameters to fix, use as reference coordinate system etc.
@@ -65,5 +65,5 @@ block MillePedeAlignmentAlgorithm = {
 	# using TwoBodyDecayReferenceTrajectoryFactory
     }
     int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
-    bool  useTrackTsos = true # Tsos from track or from reference trajectory for global derivatives
+    bool  useTrackTsos = false # Tsos from track or from reference trajectory for global derivatives
 }
