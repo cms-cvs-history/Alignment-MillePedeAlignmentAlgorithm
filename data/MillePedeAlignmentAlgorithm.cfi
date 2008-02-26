@@ -65,5 +65,6 @@ block MillePedeAlignmentAlgorithm = {
 	# using TwoBodyDecayReferenceTrajectoryFactory
     }
     int32 minNumHits = 5 # minimum number of hits (with alignable parameters)
+    double max2Dcorrelation = 0.05 # if correlation >5% 2D measurements get diagonalized
     bool  useTrackTsos = false # Tsos from track or from reference trajectory for global derivatives
 }
