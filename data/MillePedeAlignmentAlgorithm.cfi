@@ -10,7 +10,7 @@ block MillePedeAlignmentAlgorithm = {
     # Where mille writes (and pede reads) derivatives, labels etc.
     string binaryFile = "milleBinary.dat"
     # Resulting and initial parameters, absolute (original) positions, result etc.
-    string treeFile   = "treeFile.root" 
+    string treeFile   = "treeFile.root" # if empty: no treeFile 
     # Must be empty if mille runs, otherwise for merging (pede) jobs should be parallel with each
     # other. Then 'treeFile' is merged result and 'binaryFile' should be empty.
     vstring mergeBinaryFiles = {}
