@@ -1,3 +1,6 @@
+//
+// Use this file _instead_ of RecoTracker/TrackProducer/data/RefitterWithMaterial.cff!
+//
     include "RecoTracker/TrackProducer/data/RefitterWithMaterial.cfi"
 # Adjust to your needs:
 #    replace TrackRefitter.src = "AlignmentTracks"
