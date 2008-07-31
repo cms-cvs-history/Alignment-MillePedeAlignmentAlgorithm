@@ -21,6 +21,7 @@ block MillePedeAlignmentAlgorithm = {
     PSet pedeSteerer = {
 	untracked string fileDir = "" # if empty: taken from 'MillePedeAlignmentAlgorithm.fileDir'
 	string steerFile = "pedeSteer" # beginning of steering file names
+        untracked bool steerFileDebug = false
 	# If MillePedeAlignmentAlgorithm.mode causes pede to run (e.g. 'full', 'pede' etc.),
 	# the pede command line is constructed as:
 	#    'pedeCommand' 'steerFile'Master.txt 
