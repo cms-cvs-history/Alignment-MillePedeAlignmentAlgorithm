@@ -19,7 +19,7 @@ stager_get -M $MSSDIR/milleBinaryISN.dat
 rfcp $MSSDIR/milleBinaryISN.dat $BATCH_DIR
 
 # set up the CMS environment
-cd $HOME/scratch0/CMSSW_2_1_0
+cd $HOME/cms/CMSSW/CMSSW_2_0_11
 eval `scramv1 runtime -sh`
 rehash
 
@@ -27,7 +27,7 @@ cd $BATCH_DIR
 echo Running directory changed to $(pwd).
 
 # create link for treeFile(s) in mille job $RUNDIR's
-# (comment in case you a cfg not creating treeFiles...)
+# (comment in case you have a cfg not creating treeFiles...)
 ln -s $RUNDIR/../jobISN/treeFile.root treeFileISN.root
 
 # Execute. The cfg file name will be overwritten by MPS
@@ -44,10 +44,10 @@ gzip -f *.txt
 # ...and remove individual histogram files after merging to save space (if success):
 # NOTE: the names "histograms.root" and "millePedeMonitor.root" must match what is in
 #      the mps_template.cfg!
-hadd histograms_merge.root $RUNDIR/../job???/histograms.root
-if [ $? -eq 0 ]; then
-    rm $RUNDIR/../job???/histograms.root
-fi
+#hadd histograms_merge.root $RUNDIR/../job???/histograms.root
+#if [ $? -eq 0 ]; then
+#    rm $RUNDIR/../job???/histograms.root
+#fi
 hadd millePedeMonitor_merge.root $RUNDIR/../job???/millePedeMonitor.root
 if [ $? -eq 0 ]; then
     rm $RUNDIR/../job???/millePedeMonitor.root
