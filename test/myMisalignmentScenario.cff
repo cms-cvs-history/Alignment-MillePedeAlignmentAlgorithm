@@ -1,0 +1,45 @@
+replace AlignmentProducer.MisalignmentScenario = {
+# block BarrelRodsSensitiveParFixedTOBLayer6Scenario = {
+    using MisalignmentScenarioSettings # need to replace: setError = false
+    
+    PSet TIBs = { # no rotations, move rods in sensitive directions
+	string distribution = 'flat'
+	PSet BarrelLayers = {
+	    PSet Rods = { 
+		# double dXlocal = 0.02 double dYlocal = -0.05 double dZlocal = 0.01
+		# double localX = 0.002 double localY = 0.0006 double phiZlocal = -0.02
+		double dXlocal = 0.03  double dZlocal = 0.035 
+		double phiZlocal = 0.0002
+	    }
+	}
+	PSet BarrelLayer1 = {
+	    PSet Rods = { double dYlocal = 0.025 } # stereo layer...
+	}
+	PSet BarrelLayer2 = {
+	    PSet Rods = { double dYlocal = 0.025 } # dito
+	}
+	#PSet BarrelLayers = {
+	#    string distribution = 'gaussian'
+	#    double dX = 0.0105 double dY = 0.0105 double dZ = 0.0500
+	#    double phiZ = 0.000090
+	#}
+    }
+    PSet TOBs = { # similar to TIB, but fix last layer
+	string distribution = 'flat'
+	PSet BarrelLayers = {
+	    PSet Rods = {
+		double dXlocal = 0.04  double dZlocal = 0.02
+		double phiZlocal = 0.0004
+	    }
+	}
+	PSet BarrelLayer1 = {
+	    PSet Rods = { double dYlocal = 0.035 }
+	}
+	PSet BarrelLayer2 = {
+	    PSet Rods = { double dYlocal = 0.035 }
+	}
+	PSet BarrelLayer6 = { # fix it
+	    PSet Rods = { double dXlocal = 0. double dZlocal = 0. double phiZlocal = 0.}
+	}
+    }
+}
