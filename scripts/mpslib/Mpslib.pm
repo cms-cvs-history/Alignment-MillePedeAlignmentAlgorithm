@@ -38,15 +38,12 @@ package Mpslib;  # assumes Some/Module.pm
 #  @JOBSP2 - spare
 #  @JOBSP3 - spare
 
-#use strict;
-# use lib '/data/zenith217a/mankel/mgun';
-# use JobidMap;
   
   use Exporter   ();
   use vars       qw( $VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 #  use DBI;
   # set the version for version checking
-  $VERSION     = 1.00;
+  $VERSION     = 1.01;
 
   @ISA         = qw(Exporter);
   @EXPORT      = qw(
@@ -77,6 +74,7 @@ sub write_db() {
   $spare4 = "-- unused --";
   $spare5 = "-- unused --";
 
+  system "[[ -a mps.db ]] && cp -p mps.db mps.db~"; # GF: backup if exists (in case of interupt during write)
   open DBFILE,">mps.db";
   printf DBFILE "%s\n",$header;
   printf DBFILE "%s\n",$batchScript;
