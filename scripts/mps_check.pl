@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 #     R. Mankel, DESY Hamburg     09-Jul-2007
 #     A. Parenti, DESY Hamburg    24-Apr-2008
-#     $Revision: 1.17 $ by $Author: flucke $
-#     $Date: 2009/06/24 10:12:17 $
+#     $Revision: 1.19 $ by $Author: parenti $
+#     $Date: 2009/09/07 14:22:59 $
 #
 #  Check output from jobs that have FETCH status
 #  
@@ -22,6 +22,7 @@ for ($i=0; $i<@JOBID; ++$i) {
   $batchSuccess = 0;
   $batchExited = 0;
   $finished = 0;
+  $endofjob = 0;
   $eofile = 1;  # do not deal with timel yet
   $timel = 0;
   $killed = 0;
@@ -35,6 +36,7 @@ for ($i=0; $i<@JOBID; ++$i) {
   $cputime = -1;
   $pedeAbend = 0;
   $pedeLogErr = 0;
+  $pedeLogWrn = 0;
   $exceptionCaught = 0;
   $timeout = 0;
   $cfgerr = 0;
@@ -43,6 +45,7 @@ for ($i=0; $i<@JOBID; ++$i) {
   $cmdNotFound = 0;
 
   $pedeLogErrStr = "";
+  $pedeLogWrnStr = "";
   $remark = "";
 
   if (@JOBSTATUS[$i] eq "FETCH") {
@@ -107,6 +110,8 @@ for ($i=0; $i<@JOBID; ++$i) {
 	if (($line =~ m/failed RFIO error/) eq 1) { $rfioerr = 1;}
 	if (($line =~ m/Request exceeds quota/) eq 1) { $quota = 1;}
 	if (($line =~ m/Exception caught in cmsRun/) eq 1) { $exceptionCaught = 1;}
+# AP 07.09.2009 - Check that the job got to a normal end
+	if (($line =~ m/AlignmentProducer::endOfJob()/) eq 1) { $endofjob = 1;}
 	if (($line =~ m/FwkReport            -i main_input:sourc/) eq 1) {
 	  @array = split(' ',$line);
 	  $nEvent = $array[5];
@@ -128,6 +133,8 @@ for ($i=0; $i<@JOBID; ++$i) {
       }
     } else {
       print "mps_check.pl cannot find $eazeLog to test\n";
+# AP 07.09.2009 - The following check cannot be done: set to 1 to avoid fake error type
+      $endofjob = 1;
     }
 
     # for mille jobs checks that milleBinary file is not empty
@@ -174,8 +181,11 @@ for ($i=0; $i<@JOBID; ++$i) {
         open INFILE,"$eazeLog";
       # scan records in input file
         while ($line = <INFILE>) {
+# Checks for Pede Errors:
 	  if (($line =~ m/step no descending/) eq 1) {$pedeLogErr = 1; $pedeLogErrStr .= $line;}
 	  if (($line =~ m/Constraint equation discrepancies:/) eq 1) {$pedeLogErr = 1; $pedeLogErrStr .= $line;}
+# AP 07.09.2009 - Checks for Pede Warnings:
+	  if (($line =~ m/insufficient constraint equations/) eq 1) {$pedeLogWrn = 1; $pedeLogWrnStr .= $line;}
         }
         close INFILE;
         if ($logZipped eq "true") {
@@ -269,6 +279,18 @@ for ($i=0; $i<@JOBID; ++$i) {
 	$remark = "pede error";
 	$okStatus = "FAIL";
     }
+    if ($pedeLogWrn eq 1) {
+# AP 07.09.2009 - Reports Pede Warnings (but do _not_ set job status to FAIL)
+	print "@JOBDIR[$i] @JOBID[$i] Warnings in running Pede:\n";
+	print $pedeLogWrnStr;
+	$remark = "pede warnings";
+    }
+    if ($endofjob ne 1) {
+	print "@JOBDIR[$i] @JOBID[$i] Job not ended\n";
+	$remark = "job not ended";
+	$okStatus = "FAIL";
+    }
+
 
     # print warning line to stdout
     if ($okStatus ne "OK") {
