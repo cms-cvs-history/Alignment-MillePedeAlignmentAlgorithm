@@ -1,0 +1,18 @@
+<use   name="Alignment/CommonAlignment"/>
+<use   name="Alignment/CommonAlignmentAlgorithm"/>
+<use   name="Alignment/CommonAlignmentParametrization"/>
+<use   name="Alignment/MuonAlignment"/>
+<use   name="Alignment/TrackerAlignment"/>
+<use   name="DataFormats/CLHEP"/>
+<use   name="DataFormats/SiStripDetId"/>
+<use   name="DataFormats/GeometryVector"/>
+<use   name="DataFormats/TrackReco"/>
+<use   name="FWCore/MessageLogger"/>
+<use   name="FWCore/ParameterSet"/>
+<use   name="FWCore/PluginManager"/>
+<use   name="Geometry/CommonDetUnit"/>
+<use   name="Alignment/MillePedeAlignmentAlgorithm"/>
+<use   name="rootcore"/>
+<library   file="MomentumDependentPedeLabeler.cc" name="AlignmentMillePedeAlignmentAlgorithmPedeLabelers">
+  <flags   EDM_PLUGIN="1"/>
+</library>
