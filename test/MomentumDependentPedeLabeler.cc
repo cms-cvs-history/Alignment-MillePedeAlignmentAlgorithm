@@ -3,9 +3,9 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.7 $
- *  $Date: 2010/10/26 20:49:42 $
- *  (last update by $Author: flucke $)
+ *  $Revision: 1.1 $
+ *  $Date: 2011/02/16 13:13:25 $
+ *  (last update by $Author: mussgill $)
  */
 
 #include <algorithm>
@@ -90,7 +90,7 @@ unsigned int MomentumDependentPedeLabeler::alignableLabelFromParamAndInstance(Al
 	  throw cms::Exception("Alignment") << "@SUB=MomentumDependentPedeLabeler::alignableLabelFromParamAndMomentum" 
 					    << "iovIdx out of bounds";
 	}
-	return position->second + instance * theMaxNumParam;
+	return position->second + instance * theParamInstanceOffset;
       } else {
 	return position->second;
       }
@@ -163,7 +163,7 @@ unsigned int MomentumDependentPedeLabeler::parameterLabel(Alignable *alignable, 
 	     ++iMomentum) {
 	  
 	  if (iMomentum->first<=mom && mom<iMomentum->second) {
-	    return position->second + offset * theMaxNumParam + parNum;
+	    return position->second + offset * theParamInstanceOffset + parNum;
 	  }
  	  offset++;
  	}
@@ -234,7 +234,7 @@ unsigned int MomentumDependentPedeLabeler::paramNumFromLabel(unsigned int paramL
                                 << "Label " << paramLabel << " should be >= " << theMinLabel;
     return 0;
   }
-  return (paramLabel - theMinLabel) % theMaxNumParam;
+  return (paramLabel - theMinLabel) % theParamInstanceOffset;
 }
 
 //___________________________________________________________________________
@@ -412,9 +412,7 @@ unsigned int MomentumDependentPedeLabeler::buildMap(const std::vector<Alignable*
   for (std::vector<Alignable*>::const_iterator iter = allComps.begin();
        iter != allComps.end(); ++iter) {
     theAlignableToIdMap.insert(AlignableToIdPair(*iter, id));
-
-    unsigned int nInstances = this->numberOfParameterInstances(*iter, -1);
-    id += nInstances*theMaxNumParam;
+    id += theMaxNumParam;
   }
   
   // also care about las beams
@@ -450,7 +448,7 @@ unsigned int MomentumDependentPedeLabeler::buildReverseMap()
     Alignable *ali = (*it).first;
     const unsigned int nInstances = this->numberOfParameterInstances(ali, -1);
     for (unsigned int iInstance=0;iInstance<nInstances;++iInstance) {
-      theIdToAlignableMap[key+iInstance*theMaxNumParam] = ali;
+      theIdToAlignableMap[key+iInstance*theParamInstanceOffset] = ali;
     }
   }
   
