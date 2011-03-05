@@ -3,8 +3,8 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.1 $
- *  $Date: 2011/02/16 13:13:25 $
+ *  $Revision: 1.2 $
+ *  $Date: 2011/02/18 17:08:14 $
  *  (last update by $Author: mussgill $)
  */
 
@@ -26,7 +26,7 @@
 MomentumDependentPedeLabeler::MomentumDependentPedeLabeler(const PedeLabelerBase::TopLevelAlignables &alignables,
 							   const edm::ParameterSet &config)
   :PedeLabelerBase(alignables, config),
-   theOpenMomentumRange(std::make_pair<float,float>(0.0, 10000.0))
+   theOpenMomentumRange(std::pair<float,float>(0.0, 10000.0))
 {
   std::vector<Alignable*> alis;
   alis.push_back(alignables.aliTracker_);
@@ -344,7 +344,7 @@ unsigned int MomentumDependentPedeLabeler::buildMomentumDependencyMap(AlignableT
       lower = strtod(tokens[0].c_str(), 0);
       upper = strtod(tokens[1].c_str(), 0);
 
-      MomentumRanges.push_back(std::make_pair<float,float>(lower, upper));
+      MomentumRanges.push_back(std::pair<float,float>(lower, upper));
     }
     
     const std::vector<std::string> selStrings = (*iter).getParameter<std::vector<std::string> >("selector");
