@@ -3,9 +3,9 @@
  *
  *  \author    : Gero Flucke
  *  date       : October 2006
- *  $Revision: 1.24 $
- *  $Date: 2011/02/16 13:11:57 $
- *  (last update by $Author: mussgill $)
+ *  $Revision: 1.23 $
+ *  $Date: 2010/10/26 20:52:23 $
+ *  (last update by $Author: flucke $)
  */
 
 #include "DataFormats/GeometrySurface/interface/Surface.h" 
@@ -27,8 +27,9 @@
 #include "DataFormats/DetId/interface/DetId.h"
 #include "DataFormats/SiStripDetId/interface/SiStripDetId.h"
 #include "DataFormats/SiPixelDetId/interface/PixelSubdetector.h"
-#include "DataFormats/TrackerCommon/interface/TrackerTopology.h"
-#include "Geometry/Records/interface/IdealGeometryRecord.h"
+#include "DataFormats/SiStripDetId/interface/TIDDetId.h"
+#include "DataFormats/SiStripDetId/interface/TECDetId.h"
+#include "DataFormats/SiPixelDetId/interface/PXFDetId.h"
 const int kBPIX = PixelSubdetector::PixelBarrel;
 const int kFPIX = PixelSubdetector::PixelEndcap;
 
@@ -42,8 +43,8 @@ const int kFPIX = PixelSubdetector::PixelEndcap;
 typedef TransientTrackingRecHit::ConstRecHitPointer   ConstRecHitPointer;
 
 //__________________________________________________________________
-MillePedeMonitor::MillePedeMonitor(const TrackerTopology* tTopo, const char *rootFileName)
-  : myRootDir(0), myDeleteDir(false), trackerTopology(tTopo)
+MillePedeMonitor::MillePedeMonitor(const char *rootFileName)
+  : myRootDir(0), myDeleteDir(false)
 {
   myRootDir = TFile::Open(rootFileName, "recreate");
   myDeleteDir = true;
@@ -52,8 +53,8 @@ MillePedeMonitor::MillePedeMonitor(const TrackerTopology* tTopo, const char *roo
 }
 
 //__________________________________________________________________
-MillePedeMonitor::MillePedeMonitor(TDirectory *rootDir, const TrackerTopology* tTopo) 
-  : myRootDir(0), myDeleteDir(false), trackerTopology(tTopo)
+MillePedeMonitor::MillePedeMonitor(TDirectory *rootDir) 
+  : myRootDir(0), myDeleteDir(false)
 {
   //  cout << "MillePedeMonitor using input TDirectory" << endl;
 
@@ -588,12 +589,12 @@ void MillePedeMonitor::fillTrack(const reco::Track *track, std::vector<TH1*> &tr
     else if (SiStripDetId::TID == subdetId) {
       ++nhitinTID;
       ++nhitinENDCAP;
-      
-      if (trackerTopology->tidIsZMinusSide(detId)) {
+      TIDDetId tidId(detId);
+      if (tidId.isZMinusSide()) {
         ++nhitinTIDminus;
         ++nhitinENDCAPminus;
       }
-      else if (trackerTopology->tidIsZPlusSide(detId)) {
+      else if (tidId.isZPlusSide()) {
         ++nhitinTIDplus;
         ++nhitinENDCAPplus;
       }
@@ -601,12 +602,12 @@ void MillePedeMonitor::fillTrack(const reco::Track *track, std::vector<TH1*> &tr
     else if (SiStripDetId::TEC == subdetId) {
       ++nhitinTEC;
       ++nhitinENDCAP;
-      
-      if (trackerTopology->tecIsZMinusSide(detId)) {
+      TECDetId tecId(detId);
+      if (tecId.isZMinusSide()) {
         ++nhitinTECminus;
         ++nhitinENDCAPminus;
       }
-      else if (trackerTopology->tecIsZPlusSide(detId)) {
+      else if (tecId.isZPlusSide()) {
         ++nhitinTECplus;
         ++nhitinENDCAPplus;
       }
@@ -615,9 +616,9 @@ void MillePedeMonitor::fillTrack(const reco::Track *track, std::vector<TH1*> &tr
     else if (            kFPIX == subdetId) {
       ++nhitinFPIX;
       ++nhitinPIXEL;
-      
-      if (trackerTopology->pxfSide(detId)==1) ++nhitinFPIXminus;
-      else if (trackerTopology->pxfSide(detId)==2) ++nhitinFPIXplus;
+      PXFDetId fpixId(detId);
+      if (fpixId.side()==1) ++nhitinFPIXminus;
+      else if (fpixId.side()==2) ++nhitinFPIXplus;
     }
 
   } // end loop on hits
